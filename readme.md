@@ -1,11 +1,11 @@
 User Activity Log plugin for [Vanguard - Advanced PHP Login and User Management](https://vanguardapp.io)
 system.
 
-This plugin was originaly part of the Vanguard itself, but it has been extracted as a separate plugin starting from Vanguard 4.
+This plugin was originally part of the Vanguard itself, but it has been extracted as a separate plugin starting from Vanguard 4.
 
 ## Installation
 
-This plugin requires Vanguard `4.0.0` or greater.
+This plugin requires Vanguard `5.0.0` or greater.
 
 ### Installation via Composer
 
