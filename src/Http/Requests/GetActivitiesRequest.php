@@ -1,6 +1,6 @@
 <?php
 
-namespace Vanguard\UserActivity\Http\Requests\Activity;
+namespace Vanguard\UserActivity\Http\Requests;
 
 use Vanguard\Http\Requests\Request;
 

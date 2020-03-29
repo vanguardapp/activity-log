@@ -2,10 +2,12 @@
 
 namespace Vanguard\UserActivity\Http\Controllers\Api;
 
-use Vanguard\UserActivity\Http\Requests\Activity\GetActivitiesRequest;
-use Vanguard\UserActivity\Repositories\Activity\ActivityRepository;
+use Spatie\QueryBuilder\AllowedFilter;
+use Spatie\QueryBuilder\QueryBuilder;
+use Vanguard\UserActivity\Http\Resources\ActivityResource;
+use Vanguard\UserActivity\Activity;
+use Vanguard\UserActivity\Http\Requests\GetActivitiesRequest;
 use Vanguard\Http\Controllers\Api\ApiController;
-use Vanguard\UserActivity\Transformers\ActivityTransformer;
 
 /**
  * Class ActivityController
@@ -22,19 +24,20 @@ class ActivityController extends ApiController
     /**
      * Paginate user activities.
      * @param GetActivitiesRequest $request
-     * @param ActivityRepository $activities
-     * @return \Illuminate\Http\JsonResponse
+     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
      */
-    public function index(GetActivitiesRequest $request, ActivityRepository $activities)
+    public function index(GetActivitiesRequest $request)
     {
-        $result = $activities->paginateActivities(
-            $request->per_page ?: 20,
-            $request->search
-        );
+        $activities = QueryBuilder::for(Activity::class)
+            ->allowedIncludes('user')
+            ->allowedFilters([
+                AllowedFilter::partial('description'),
+                AllowedFilter::exact('user', 'user_id')
+            ])
+            ->allowedSorts('created_at')
+            ->defaultSort('-created_at')
+            ->paginate($request->per_page ?: 20);
 
-        return $this->respondWithPagination(
-            $result,
-            new ActivityTransformer
-        );
+        return ActivityResource::collection($activities);
     }
 }
