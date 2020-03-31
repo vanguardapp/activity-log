@@ -5,6 +5,7 @@ namespace Vanguard\UserActivity\Tests\Feature\Api;
 use Facades\Tests\Setup\UserFactory;
 use Tests\Feature\ApiTestCase;
 use Vanguard\UserActivity\Activity;
+use Vanguard\UserActivity\Http\Resources\ActivityResource;
 use Vanguard\UserActivity\Transformers\ActivityTransformer;
 use Vanguard\User;
 
@@ -21,8 +22,9 @@ class ActivityTest extends ApiTestCase
     {
         $user = factory(User::class)->create();
 
-        $this->actingAs($user, 'api')
+        $this->actingAs($user, self::API_GUARD)
             ->getJson('/api/activity')
+            ->dump()
             ->assertStatus(403);
     }
 
@@ -36,20 +38,20 @@ class ActivityTest extends ApiTestCase
 
         factory(Activity::class)->times(10)->create(['user_id' => $user2->id]);
 
-        $response = $this->actingAs($user, 'api')->getJson("/api/activity");
+        $response = $this->actingAs($user, self::API_GUARD)->getJson("/api/activity");
 
-        $transformed = $this->transformCollection($activities->take(20), new ActivityTransformer);
+        $transformed = ActivityResource::collection($activities->take(20))->resolve();
 
-        $this->assertEquals($response->original['data'], $transformed);
-        $this->assertEquals($response->original['meta'], [
+
+        $this->assertEquals($response->json('data'), $transformed);
+        $this->assertEquals($response->json('meta'), [
             'current_page' => 1,
             'from' => 1,
             'to' => 20,
             'last_page' => 2,
-            'prev_page_url' => null,
-            'next_page_url' => url("api/activity?page=2"),
+            'path' => url("api/activity"),
             'total' => 35,
-            'per_page' => 20
+            'per_page' => 20,
         ]);
     }
 
@@ -68,31 +70,55 @@ class ActivityTest extends ApiTestCase
             'description' => 'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris...'
         ]);
 
-        $transformed = $this->transformCollection($set2, new ActivityTransformer);
+        $transformed = ActivityResource::collection($set2)->resolve();
 
-        $response = $this->actingAs($user, 'api')
-            ->getJson("/api/activity?search=minim&per_page=10")
+        $response = $this->actingAs($user, self::API_GUARD)
+            ->getJson("/api/activity?filter[description]=minim&per_page=10&sort=created_at")
             ->assertOk();
 
-        $this->assertEquals($response->original['data'], $transformed);
-        $this->assertEquals($response->original['meta'], [
+        $this->assertEquals($response->json('data'), $transformed);
+        $this->assertEquals($response->json('meta'), [
             'current_page' => 1,
             'from' => 1,
             'to' => 5,
             'last_page' => 1,
-            'prev_page_url' => null,
-            'next_page_url' => null,
             'total' => 5,
-            'per_page' => 10
+            'per_page' => 10,
+            'path' => url('api/activity')
         ]);
     }
 
     /** @test */
     public function paginate_activities_with_more_records_per_page_than_allowed()
     {
-        $this->actingAs($this->getUser(), 'api')
+        $this->actingAs($this->getUser(), self::API_GUARD)
             ->getJson("/api/activity?per_page=140")
             ->assertStatus(422);
+    }
+
+    /** @test */
+    public function paginate_activities_for_user()
+    {
+        $user = UserFactory::user()->withPermissions('users.activity')->create();
+
+        $this->be($user, self::API_GUARD);
+
+        $activities = factory(Activity::class)->times(25)->create(['user_id' => $user->id]);
+
+        $response = $this->getJson("/api/activity?filters[user]={$user->id}");
+
+        $transformed = ActivityResource::collection($activities->take(20))->resolve();
+
+        $this->assertEquals($response->json('data'), $transformed);
+        $this->assertEquals($response->json('meta'), [
+            'current_page' => 1,
+            'from' => 1,
+            'to' => 20,
+            'last_page' => 2,
+            'path' => url("api/activity"),
+            'total' => 25,
+            'per_page' => 20
+        ]);
     }
 
     /**
