@@ -12,7 +12,6 @@ use Vanguard\UserActivity\Listeners\RoleEventsSubscriber;
 use Vanguard\UserActivity\Listeners\UserEventsSubscriber;
 use Vanguard\UserActivity\Repositories\Activity\ActivityRepository;
 use Vanguard\UserActivity\Repositories\Activity\EloquentActivity;
-use Illuminate\Database\Eloquent\Factory;
 use View;
 
 class UserActivity extends Plugin
@@ -66,8 +65,6 @@ class UserActivity extends Plugin
         $this->attachViewComposers();
 
         $this->registerEventListeners();
-
-        $this->loadTestingFactories();
     }
 
     /**
@@ -113,15 +110,5 @@ class UserActivity extends Plugin
     private function attachViewComposers()
     {
         View::composer('user.view', ShowUserComposer::class);
-    }
-
-    /**
-     * @throws \Illuminate\Contracts\Container\BindingResolutionException
-     */
-    private function loadTestingFactories()
-    {
-        if (! $this->app->environment('production') && $this->app->runningInConsole()) {
-            $this->app->make(Factory::class)->load(__DIR__ . '/../database/factories');
-        }
     }
 }

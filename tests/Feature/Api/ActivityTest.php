@@ -20,7 +20,7 @@ class ActivityTest extends ApiTestCase
     /** @test */
     public function get_activities_without_permission()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
         $this->actingAs($user, self::API_GUARD)
             ->getJson('/api/activity')
@@ -32,11 +32,11 @@ class ActivityTest extends ApiTestCase
     public function paginate_activities()
     {
         $user = $this->getUser();
-        $user2 = factory(User::class)->create();
+        $user2 = User::factory()->create();
 
-        $activities = factory(Activity::class)->times(25)->create(['user_id' => $user->id]);
+        $activities = Activity::factory()->times(25)->create(['user_id' => $user->id]);
 
-        factory(Activity::class)->times(10)->create(['user_id' => $user2->id]);
+        Activity::factory()->times(10)->create(['user_id' => $user2->id]);
 
         $response = $this->actingAs($user, self::API_GUARD)->getJson("/api/activity");
 
@@ -60,12 +60,12 @@ class ActivityTest extends ApiTestCase
     {
         $user = $this->getUser();
 
-        $set1 = factory(Activity::class)->times(10)->create([
+        $set1 = Activity::factory()->times(10)->create([
             'user_id' => $user->id,
             'description' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
         ]);
 
-        $set2 = factory(Activity::class)->times(5)->create([
+        $set2 = Activity::factory()->times(5)->create([
             'user_id' => $user->id,
             'description' => 'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris...'
         ]);
@@ -103,7 +103,7 @@ class ActivityTest extends ApiTestCase
 
         $this->be($user, self::API_GUARD);
 
-        $activities = factory(Activity::class)->times(25)->create(['user_id' => $user->id]);
+        $activities = Activity::factory()->times(25)->create(['user_id' => $user->id]);
 
         $response = $this->getJson("/api/activity?filters[user]={$user->id}");
 

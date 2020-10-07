@@ -1,5 +1,7 @@
 <?php
 
+namespace Vanguard\UserActivity\Database\Seeders;
+
 use Vanguard\Permission;
 use Vanguard\Role;
 use Illuminate\Database\Seeder;

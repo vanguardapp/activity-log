@@ -13,13 +13,13 @@ class StatsTest extends ApiTestCase
     /** @test */
     public function non_admin_users_cannot_get_user_stats()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
         Carbon::setTestNow(Carbon::now()->subWeek());
-        factory(Activity::class)->times(5)->create(['user_id' => $user->id]);
+        Activity::factory()->times(5)->create(['user_id' => $user->id]);
 
         Carbon::setTestNow(null);
-        factory(Activity::class)->times(5)->create(['user_id' => $user->id]);
+        Activity::factory()->times(5)->create(['user_id' => $user->id]);
 
         $response = $this->actingAs($user, self::API_GUARD)->getJson("/api/stats/activity");
 

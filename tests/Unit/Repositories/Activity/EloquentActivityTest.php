@@ -28,7 +28,7 @@ class EloquentActivityTest extends TestCase
     /** @test */
     public function log()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
         Carbon::setTestNow(Carbon::now());
 
@@ -47,9 +47,9 @@ class EloquentActivityTest extends TestCase
     /** @test */
     public function paginate_activities_for_user()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
-        $activities = factory(Activity::class)->times(10)->create(['user_id' => $user->id]);
+        $activities = Activity::factory()->times(10)->create(['user_id' => $user->id]);
 
         $result = $this->repo->paginateActivitiesForUser($user->id, 6)->toArray();
 
@@ -62,13 +62,13 @@ class EloquentActivityTest extends TestCase
     /** @test */
     public function latest_activities_for_user()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
         Carbon::setTestNow(Carbon::now()->subDay());
-        $activities1 = factory(Activity::class)->times(5)->create(['user_id' => $user->id]);
+        $activities1 = Activity::factory()->times(5)->create(['user_id' => $user->id]);
 
         Carbon::setTestNow(null);
-        $activities2 = factory(Activity::class)->times(5)->create(['user_id' => $user->id]);
+        $activities2 = Activity::factory()->times(5)->create(['user_id' => $user->id]);
 
         $result = $this->repo->getLatestActivitiesForUser($user->id, 6)->toArray();
 
@@ -80,7 +80,7 @@ class EloquentActivityTest extends TestCase
     /** @test */
     public function paginate_activities()
     {
-        $activities = factory(Activity::class)->times(10)->create();
+        $activities = Activity::factory()->times(10)->create();
 
         $result = $this->repo->paginateActivities(6)->toArray();
 
@@ -94,20 +94,20 @@ class EloquentActivityTest extends TestCase
     /** @test */
     public function userActivityForPeriod()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
         $now = Carbon::now();
 
         Carbon::setTestNow($now->copy()->subDays(15));
-        factory(Activity::class)->times(5)->create(['user_id' => $user->id]);
+        Activity::factory()->times(5)->create(['user_id' => $user->id]);
 
         Carbon::setTestNow($now->copy()->subDays(11));
-        factory(Activity::class)->times(2)->create(['user_id' => $user->id]);
+        Activity::factory()->times(2)->create(['user_id' => $user->id]);
 
         Carbon::setTestNow($now->copy()->subDays(5));
-        factory(Activity::class)->times(3)->create(['user_id' => $user->id]);
+        Activity::factory()->times(3)->create(['user_id' => $user->id]);
 
         Carbon::setTestNow($now->copy()->subDays(2));
-        factory(Activity::class)->times(2)->create(['user_id' => $user->id]);
+        Activity::factory()->times(2)->create(['user_id' => $user->id]);
 
         Carbon::setTestNow(null);
 

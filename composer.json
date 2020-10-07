@@ -26,17 +26,15 @@
         "phpunit/phpunit": "^9.0"
     },
     "autoload": {
-        "classmap": [
-            "database/seeds",
-            "database/factories"
-        ],
         "psr-4": {
             "Vanguard\\UserActivity\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Vanguard\\UserActivity\\Tests\\": "tests/"
+            "Vanguard\\UserActivity\\Tests\\": "tests/",
+            "Vanguard\\UserActivity\\Database\\Factories\\": "database/factories/",
+            "Vanguard\\UserActivity\\Database\\Seeders\\": "database/seeders/"
         }
     },
     "config": {
