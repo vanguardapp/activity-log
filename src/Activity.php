@@ -5,6 +5,7 @@ namespace Vanguard\UserActivity;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Vanguard\User;
 use Illuminate\Database\Eloquent\Model;
+use Vanguard\UserActivity\Database\Factories\ActivityFactory;
 
 class Activity extends Model
 {
@@ -28,6 +29,6 @@ class Activity extends Model
      */
     protected static function newFactory()
     {
-        return ActivityFactory::new();
+        return new ActivityFactory;
     }
 }

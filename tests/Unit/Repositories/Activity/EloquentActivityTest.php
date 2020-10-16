@@ -2,7 +2,7 @@
 
 namespace Vanguard\UserActivity\Tests\Unit\Repositories\Activity;
 
-use Illuminate\Foundation\Testing\Assert;
+use Illuminate\Testing\Assert;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 use Vanguard\User;

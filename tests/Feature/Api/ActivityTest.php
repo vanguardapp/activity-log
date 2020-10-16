@@ -42,16 +42,17 @@ class ActivityTest extends ApiTestCase
 
         $transformed = ActivityResource::collection($activities->take(20))->resolve();
 
-
         $this->assertEquals($response->json('data'), $transformed);
-        $this->assertEquals($response->json('meta'), [
-            'current_page' => 1,
-            'from' => 1,
-            'to' => 20,
-            'last_page' => 2,
-            'path' => url("api/activity"),
-            'total' => 35,
-            'per_page' => 20,
+        $response->assertJson([
+            'meta' => [
+                'current_page' => 1,
+                'from' => 1,
+                'to' => 20,
+                'last_page' => 2,
+                'path' => url("api/activity"),
+                'total' => 35,
+                'per_page' => 20,
+            ]
         ]);
     }
 
@@ -77,14 +78,16 @@ class ActivityTest extends ApiTestCase
             ->assertOk();
 
         $this->assertEquals($response->json('data'), $transformed);
-        $this->assertEquals($response->json('meta'), [
-            'current_page' => 1,
-            'from' => 1,
-            'to' => 5,
-            'last_page' => 1,
-            'total' => 5,
-            'per_page' => 10,
-            'path' => url('api/activity')
+        $response->assertJson([
+            'meta' => [
+                'current_page' => 1,
+                'from' => 1,
+                'to' => 5,
+                'last_page' => 1,
+                'total' => 5,
+                'per_page' => 10,
+                'path' => url('api/activity')
+            ]
         ]);
     }
 
@@ -110,14 +113,16 @@ class ActivityTest extends ApiTestCase
         $transformed = ActivityResource::collection($activities->take(20))->resolve();
 
         $this->assertEquals($response->json('data'), $transformed);
-        $this->assertEquals($response->json('meta'), [
-            'current_page' => 1,
-            'from' => 1,
-            'to' => 20,
-            'last_page' => 2,
-            'path' => url("api/activity"),
-            'total' => 25,
-            'per_page' => 20
+        $response->assertJson([
+            'meta' => [
+                'current_page' => 1,
+                'from' => 1,
+                'to' => 20,
+                'last_page' => 2,
+                'path' => url("api/activity"),
+                'total' => 25,
+                'per_page' => 20
+            ]
         ]);
     }
 

@@ -27,14 +27,14 @@
     },
     "autoload": {
         "psr-4": {
-            "Vanguard\\UserActivity\\": "src/"
+            "Vanguard\\UserActivity\\": "src/",
+            "Vanguard\\UserActivity\\Database\\Factories\\": "database/factories/",
+            "Vanguard\\UserActivity\\Database\\Seeders\\": "database/seeders/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Vanguard\\UserActivity\\Tests\\": "tests/",
-            "Vanguard\\UserActivity\\Database\\Factories\\": "database/factories/",
-            "Vanguard\\UserActivity\\Database\\Seeders\\": "database/seeders/"
+            "Vanguard\\UserActivity\\Tests\\": "tests/"
         }
     },
     "config": {
