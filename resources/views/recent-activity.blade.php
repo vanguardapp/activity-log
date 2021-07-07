@@ -28,7 +28,7 @@
                 @foreach($activities as $activity)
                     <tr>
                         <td>{{ $activity->description }}</td>
-                        <td>{{ $activity->created_at->format(config('app.date_time_format')) }}</td>
+                        <td>{{ $activity->created_at->formatLocalized(config('app.localized_date_time_format')) }}</td>
                     </tr>
                 @endforeach
                 </tbody>
