@@ -20,6 +20,7 @@ class ActivityResource extends JsonResource
         return [
             'id' => (int) $this->id,
             'user_id' => (int) $this->user_id,
+            'user' => $this->user,
             'ip_address' => $this->ip_address,
             'user_agent' => $this->user_agent,
             'browser' => $agent->browser(),
