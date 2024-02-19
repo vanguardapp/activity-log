@@ -16,10 +16,7 @@ class ActivityWidget extends Widget
      */
     public ?string $width = '12';
 
-    /**
-     * @var array The list of user activity records.
-     */
-    private array $userActivity;
+    private ?array $userActivity = null;
 
     public function __construct(private readonly ActivityRepository $activities)
     {

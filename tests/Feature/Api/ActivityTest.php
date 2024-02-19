@@ -23,7 +23,6 @@ class ActivityTest extends ApiTestCase
 
         $this->actingAs($user, self::API_GUARD)
             ->getJson('/api/activity')
-            ->dump()
             ->assertStatus(403);
     }
 

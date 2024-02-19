@@ -9,12 +9,12 @@ use Vanguard\Events\Role\Updated;
 
 class RoleEventsSubscriberTest extends ListenerTestCase
 {
-    protected $role;
+    protected \Vanguard\Role $role;
 
     protected function setUp(): void
     {
         parent::setUp();
-        $this->role = factory(\Vanguard\Role::class)->create();
+        $this->role = \Vanguard\Role::factory()->create();
     }
 
     /** @test */

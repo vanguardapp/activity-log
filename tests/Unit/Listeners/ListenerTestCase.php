@@ -6,20 +6,20 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 use Vanguard\User;
 
-class ListenerTestCase extends TestCase
+abstract class ListenerTestCase extends TestCase
 {
     use RefreshDatabase;
 
-    protected $user;
+    protected User $user;
 
     protected function setUp(): void
     {
         parent::setUp();
-        $this->user = factory(User::class)->create();
+        $this->user = User::factory()->create();
         $this->be($this->user);
     }
 
-    protected function assertMessageLogged($msg, $user = null)
+    protected function assertMessageLogged($msg, $user = null): void
     {
         $this->assertDatabaseHas('user_activity', [
             'user_id' => $user ? $user->id : $this->user->id,

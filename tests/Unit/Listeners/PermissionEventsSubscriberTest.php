@@ -6,14 +6,27 @@ use Vanguard\Events\Permission\Created;
 use Vanguard\Events\Permission\Deleted;
 use Vanguard\Events\Permission\Updated;
 
-class PermissionEventsSubscriberTest extends ListenerTestCase
+// Manually require the base test case to avoid issues while running automated tests
+require_once __DIR__.'/ListenerTestCase.php';
+
+class PermissionEventsSubscriberTest extends \Vanguard\UserActivity\Tests\Unit\Listeners\ListenerTestCase
 {
-    protected $perm;
+    protected \Vanguard\Permission $perm;
 
     protected function setUp(): void
     {
         parent::setUp();
-        $this->perm = factory(\Vanguard\Permission::class)->create();
+        $this->perm = \Vanguard\Permission::factory()->create();
+    }
+
+    protected function assertMessageLogged($msg, $user = null): void
+    {
+        $this->assertDatabaseHas('user_activity', [
+            'user_id' => $user ? $user->id : $this->user->id,
+            'ip_address' => \Request::ip(),
+            'user_agent' => \Request::header('User-agent'),
+            'description' => $msg,
+        ]);
     }
 
     /** @test */

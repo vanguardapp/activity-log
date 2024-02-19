@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use DB;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Collection as BaseCollection;
 use Vanguard\UserActivity\Activity;
 
 class EloquentActivity implements ActivityRepository
@@ -71,7 +72,7 @@ class EloquentActivity implements ActivityRepository
     /**
      * {@inheritdoc}
      */
-    public function userActivityForPeriod($userId, Carbon $from, Carbon $to): Collection
+    public function userActivityForPeriod($userId, Carbon $from, Carbon $to): BaseCollection
     {
         $result = Activity::select([
             DB::raw('DATE(created_at) as day'),

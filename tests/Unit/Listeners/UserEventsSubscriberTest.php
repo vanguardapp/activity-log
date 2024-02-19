@@ -8,12 +8,12 @@ class UserEventsSubscriberTest extends ListenerTestCase
 {
     use UpdatesSettings;
 
-    protected $theUser;
+    protected \Vanguard\User $theUser;
 
     protected function setUp(): void
     {
         parent::setUp();
-        $this->theUser = factory(\Vanguard\User::class)->create();
+        $this->theUser = \Vanguard\User::factory()->create();
     }
 
     /** @test */
@@ -38,7 +38,7 @@ class UserEventsSubscriberTest extends ListenerTestCase
             'reg_email_confirmation' => true,
         ]);
 
-        $user = factory(\Vanguard\User::class)->create();
+        $user = \Vanguard\User::factory()->create();
 
         event(new \Illuminate\Auth\Events\Registered($user));
 
@@ -175,7 +175,7 @@ class UserEventsSubscriberTest extends ListenerTestCase
     /** @test */
     public function onStartImpersonating()
     {
-        $impersonated = factory(\Vanguard\User::class)->create([
+        $impersonated = \Vanguard\User::factory()->create([
             'first_name' => 'John',
             'last_name' => 'Doe',
         ]);
@@ -188,7 +188,7 @@ class UserEventsSubscriberTest extends ListenerTestCase
     /** @test */
     public function onStopImpersonating()
     {
-        $impersonated = factory(\Vanguard\User::class)->create([
+        $impersonated = \Vanguard\User::factory()->create([
             'first_name' => 'John',
             'last_name' => 'Doe',
         ]);

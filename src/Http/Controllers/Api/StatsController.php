@@ -10,17 +10,19 @@ use Vanguard\UserActivity\Repositories\Activity\ActivityRepository;
 
 class StatsController extends ApiController
 {
-    public function __construct(private ActivityRepository $activities)
+    public function __construct(private readonly ActivityRepository $activities)
     {
         $this->middleware('auth');
     }
 
     public function show(): JsonResponse
     {
-        return $this->activities->userActivityForPeriod(
+        $data = $this->activities->userActivityForPeriod(
             Auth::user()->id,
             Carbon::now()->subWeeks(2),
             Carbon::now()
         );
+
+        return response()->json($data);
     }
 }

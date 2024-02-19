@@ -5,6 +5,7 @@ namespace Vanguard\UserActivity\Repositories\Activity;
 use Carbon\Carbon;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Collection as BaseCollection;
 use Vanguard\UserActivity\Activity;
 
 interface ActivityRepository
@@ -44,8 +45,6 @@ interface ActivityRepository
 
     /**
      * Get count of user activities per day for given period of time.
-     *
-     * @return Collection<Activity>
      */
-    public function userActivityForPeriod(int $userId, Carbon $from, Carbon $to): Collection;
+    public function userActivityForPeriod(int $userId, Carbon $from, Carbon $to): BaseCollection;
 }
