@@ -4,6 +4,7 @@ namespace Vanguard\UserActivity\Widgets;
 
 use Auth;
 use Carbon\Carbon;
+use Illuminate\Contracts\View\View;
 use Vanguard\Plugins\Widget;
 use Vanguard\User;
 use Vanguard\UserActivity\Repositories\Activity\ActivityRepository;
@@ -13,42 +14,35 @@ class ActivityWidget extends Widget
     /**
      * {@inheritdoc}
      */
-    public $width = '12';
-
-    /**
-     * @var ActivityRepository
-     */
-    private $activities;
+    public ?string $width = '12';
 
     /**
      * @var array The list of user activity records.
      */
-    private $userActivity;
+    private array $userActivity;
 
-    public function __construct(ActivityRepository $activities)
+    public function __construct(private readonly ActivityRepository $activities)
     {
-        $this->activities = $activities;
-
         $this->permissions(function (User $user) {
             return $user->hasRole('User');
         });
     }
 
-    public function render()
+    public function render(): View
     {
         return view('user-activity::widgets.user-activity', [
-            'activities' => $this->getActivity()
+            'activities' => $this->getActivity(),
         ]);
     }
 
-    public function scripts()
+    public function scripts(): View
     {
         return view('user-activity::widgets.user-activity-scripts', [
-            'activities' => $this->getActivity()
+            'activities' => $this->getActivity(),
         ]);
     }
 
-    private function getActivity()
+    private function getActivity(): array
     {
         if ($this->userActivity) {
             return $this->userActivity;

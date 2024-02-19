@@ -2,25 +2,20 @@
 
 namespace Vanguard\UserActivity\Listeners;
 
+use Illuminate\Events\Dispatcher;
 use Vanguard\Events\Role\Created;
+use Vanguard\Events\Role\Deleted;
 use Vanguard\Events\Role\PermissionsUpdated;
 use Vanguard\Events\Role\Updated;
-use Vanguard\Events\Role\Deleted;
 use Vanguard\UserActivity\Logger;
 
 class RoleEventsSubscriber
 {
-    /**
-     * @var Logger
-     */
-    private $logger;
-
-    public function __construct(Logger $logger)
+    public function __construct(private readonly Logger $logger)
     {
-        $this->logger = $logger;
     }
 
-    public function onCreate(Created $event)
+    public function onCreate(Created $event): void
     {
         $message = trans(
             'user-activity::log.new_role',
@@ -30,7 +25,7 @@ class RoleEventsSubscriber
         $this->logger->log($message);
     }
 
-    public function onUpdate(Updated $event)
+    public function onUpdate(Updated $event): void
     {
         $message = trans(
             'user-activity::log.updated_role',
@@ -40,7 +35,7 @@ class RoleEventsSubscriber
         $this->logger->log($message);
     }
 
-    public function onDelete(Deleted $event)
+    public function onDelete(Deleted $event): void
     {
         $message = trans(
             'user-activity::log.deleted_role',
@@ -50,17 +45,15 @@ class RoleEventsSubscriber
         $this->logger->log($message);
     }
 
-    public function onPermissionsUpdate(PermissionsUpdated $event)
+    public function onPermissionsUpdate(PermissionsUpdated $event): void
     {
         $this->logger->log(trans('user-activity::log.updated_role_permissions'));
     }
 
     /**
      * Register the listeners for the subscriber.
-     *
-     * @param  \Illuminate\Events\Dispatcher  $events
      */
-    public function subscribe($events)
+    public function subscribe(Dispatcher $events): void
     {
         $class = self::class;
 

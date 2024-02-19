@@ -2,11 +2,11 @@
 
 namespace Vanguard\UserActivity\Tests\Unit\Repositories\Activity;
 
-use Illuminate\Testing\Assert;
+use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Testing\Assert;
 use Tests\TestCase;
 use Vanguard\User;
-use Carbon\Carbon;
 use Vanguard\UserActivity\Activity;
 use Vanguard\UserActivity\Repositories\Activity\EloquentActivity;
 
@@ -36,7 +36,7 @@ class EloquentActivityTest extends TestCase
             'user_id' => $user->id,
             'ip_address' => '123.456.789.012',
             'user_agent' => 'foo',
-            'description' => 'descriptionnnn'
+            'description' => 'descriptionnnn',
         ];
 
         $this->repo->log($data);

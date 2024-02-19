@@ -3,57 +3,49 @@
 namespace Vanguard\UserActivity\Repositories\Activity;
 
 use Carbon\Carbon;
-use Illuminate\Contracts\Pagination\Paginator;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Collection;
+use Vanguard\UserActivity\Activity;
 
 interface ActivityRepository
 {
     /**
      * Log user activity.
      *
-     * @param $data array Array with following fields:
-     *      description (string) - Description of user activity.
-     *      user_id (int) - User unique identifier.
-     *      ip_address (string) - Ip address from which user is accessing the website.
-     *      user_agent (string) - User's browser info.
+     * @param  $data  array Array with following fields:
+     *               description (string) - Description of user activity.
+     *               user_id (int) - User unique identifier.
+     *               ip_address (string) - Ip address from which user is accessing the website.
+     *               user_agent (string) - User's browser info.
      * @return mixed
      */
-    public function log($data);
+    public function log(array $data): Activity;
 
     /**
      * Paginate activities for user.
-     *
-     * @param $userId
-     * @param int $perPage
-     * @param null $search
-     * @return mixed
      */
-    public function paginateActivitiesForUser($userId, $perPage = 20, $search = null);
+    public function paginateActivitiesForUser(
+        int $userId,
+        int $perPage = 20,
+        ?string $search = null
+    ): LengthAwarePaginator;
 
     /**
      * Get specified number of latest user activity logs.
      *
-     * @param $userId
-     * @param int $activitiesCount
-     * @return mixed
+     * @return Collection<Activity>
      */
-    public function getLatestActivitiesForUser($userId, $activitiesCount = 10);
+    public function getLatestActivitiesForUser(int $userId, int $activitiesCount = 10): Collection;
 
     /**
      * Paginate all activity records.
-     *
-     * @param int $perPage
-     * @param null $search
-     * @return Paginator
      */
-    public function paginateActivities($perPage = 20, $search = null);
+    public function paginateActivities(int $perPage = 20, ?string $search = null): LengthAwarePaginator;
 
     /**
      * Get count of user activities per day for given period of time.
      *
-     * @param $userId
-     * @param $from
-     * @param $to
-     * @return mixed
+     * @return Collection<Activity>
      */
-    public function userActivityForPeriod($userId, Carbon $from, Carbon $to);
+    public function userActivityForPeriod(int $userId, Carbon $from, Carbon $to): Collection;
 }

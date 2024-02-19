@@ -42,6 +42,6 @@ class RoleEventsSubscriberTest extends ListenerTestCase
     public function onPermissionsUpdate()
     {
         event(new PermissionsUpdated());
-        $this->assertMessageLogged("Updated role permissions.");
+        $this->assertMessageLogged('Updated role permissions.');
     }
 }

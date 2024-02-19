@@ -4,6 +4,7 @@ namespace Vanguard\UserActivity\Listeners;
 
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Auth\Events\Registered;
+use Illuminate\Events\Dispatcher;
 use Lab404\Impersonate\Events\LeaveImpersonation;
 use Lab404\Impersonate\Events\TakeImpersonation;
 use Vanguard\Events\Settings\Updated as SettingsUpdated;
@@ -24,43 +25,37 @@ use Vanguard\UserActivity\Logger;
 
 class UserEventsSubscriber
 {
-    /**
-     * @var Logger
-     */
-    private $logger;
-
-    public function __construct(Logger $logger)
+    public function __construct(private readonly Logger $logger)
     {
-        $this->logger = $logger;
     }
 
-    public function onLogin(LoggedIn $event)
+    public function onLogin(LoggedIn $event): void
     {
         $this->logger->log(trans('user-activity::log.logged_in'));
     }
 
-    public function onLogout(LoggedOut $event)
+    public function onLogout(LoggedOut $event): void
     {
         $this->logger->log(trans('user-activity::log.logged_out'));
     }
 
-    public function onRegister(Registered $event)
+    public function onRegister(Registered $event): void
     {
         $this->logger->setUser($event->user);
         $this->logger->log(trans('user-activity::log.created_account'));
     }
 
-    public function onAvatarChange(ChangedAvatar $event)
+    public function onAvatarChange(ChangedAvatar $event): void
     {
         $this->logger->log(trans('user-activity::log.updated_avatar'));
     }
 
-    public function onProfileDetailsUpdate(UpdatedProfileDetails $event)
+    public function onProfileDetailsUpdate(UpdatedProfileDetails $event): void
     {
         $this->logger->log(trans('user-activity::log.updated_profile'));
     }
 
-    public function onDelete(Deleted $event)
+    public function onDelete(Deleted $event): void
     {
         $message = trans(
             'user-activity::log.deleted_user',
@@ -70,7 +65,7 @@ class UserEventsSubscriber
         $this->logger->log($message);
     }
 
-    public function onBan(Banned $event)
+    public function onBan(Banned $event): void
     {
         $message = trans(
             'user-activity::log.banned_user',
@@ -80,7 +75,7 @@ class UserEventsSubscriber
         $this->logger->log($message);
     }
 
-    public function onUpdateByAdmin(UpdatedByAdmin $event)
+    public function onUpdateByAdmin(UpdatedByAdmin $event): void
     {
         $message = trans(
             'user-activity::log.updated_profile_details_for',
@@ -90,7 +85,7 @@ class UserEventsSubscriber
         $this->logger->log($message);
     }
 
-    public function onCreate(Created $event)
+    public function onCreate(Created $event): void
     {
         $message = trans(
             'user-activity::log.created_account_for',
@@ -100,22 +95,22 @@ class UserEventsSubscriber
         $this->logger->log($message);
     }
 
-    public function onSettingsUpdate(SettingsUpdated $event)
+    public function onSettingsUpdate(SettingsUpdated $event): void
     {
         $this->logger->log(trans('user-activity::log.updated_settings'));
     }
 
-    public function onTwoFactorEnable(TwoFactorEnabled $event)
+    public function onTwoFactorEnable(TwoFactorEnabled $event): void
     {
         $this->logger->log(trans('user-activity::log.enabled_2fa'));
     }
 
-    public function onTwoFactorDisable(TwoFactorDisabled $event)
+    public function onTwoFactorDisable(TwoFactorDisabled $event): void
     {
         $this->logger->log(trans('user-activity::log.disabled_2fa'));
     }
 
-    public function onTwoFactorEnableByAdmin(TwoFactorEnabledByAdmin $event)
+    public function onTwoFactorEnableByAdmin(TwoFactorEnabledByAdmin $event): void
     {
         $message = trans(
             'user-activity::log.enabled_2fa_for',
@@ -125,7 +120,7 @@ class UserEventsSubscriber
         $this->logger->log($message);
     }
 
-    public function onTwoFactorDisableByAdmin(TwoFactorDisabledByAdmin $event)
+    public function onTwoFactorDisableByAdmin(TwoFactorDisabledByAdmin $event): void
     {
         $message = trans(
             'user-activity::log.disabled_2fa_for',
@@ -135,37 +130,37 @@ class UserEventsSubscriber
         $this->logger->log($message);
     }
 
-    public function onPasswordResetEmailRequest(RequestedPasswordResetEmail $event)
+    public function onPasswordResetEmailRequest(RequestedPasswordResetEmail $event): void
     {
         $this->logger->setUser($event->getUser());
         $this->logger->log(trans('user-activity::log.requested_password_reset'));
     }
 
-    public function onPasswordReset(PasswordReset $event)
+    public function onPasswordReset(PasswordReset $event): void
     {
         $this->logger->setUser($event->user);
         $this->logger->log(trans('user-activity::log.reseted_password'));
     }
 
-    public function onStartImpersonating(TakeImpersonation $event)
+    public function onStartImpersonating(TakeImpersonation $event): void
     {
         $this->logger->setUser($event->impersonator);
 
         $message = trans('user-activity::log.started_impersonating', [
             'id' => $event->impersonated->id,
-            'name' => $event->impersonated->present()->name
+            'name' => $event->impersonated->present()->name,
         ]);
 
         $this->logger->log($message);
     }
 
-    public function onStopImpersonating(LeaveImpersonation $event)
+    public function onStopImpersonating(LeaveImpersonation $event): void
     {
         $this->logger->setUser($event->impersonator);
 
         $message = trans('user-activity::log.stopped_impersonating', [
             'id' => $event->impersonated->id,
-            'name' => $event->impersonated->present()->name
+            'name' => $event->impersonated->present()->name,
         ]);
 
         $this->logger->log($message);
@@ -173,10 +168,8 @@ class UserEventsSubscriber
 
     /**
      * Register the listeners for the subscriber.
-     *
-     * @param  \Illuminate\Events\Dispatcher  $events
      */
-    public function subscribe($events)
+    public function subscribe(Dispatcher $events)
     {
         $class = self::class;
 

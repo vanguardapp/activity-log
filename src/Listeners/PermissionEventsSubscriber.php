@@ -2,6 +2,7 @@
 
 namespace Vanguard\UserActivity\Listeners;
 
+use Illuminate\Events\Dispatcher;
 use Vanguard\Events\Permission\Created;
 use Vanguard\Events\Permission\Deleted;
 use Vanguard\Events\Permission\Updated;
@@ -9,17 +10,11 @@ use Vanguard\UserActivity\Logger;
 
 class PermissionEventsSubscriber
 {
-    /**
-     * @var Logger
-     */
-    private $logger;
-
-    public function __construct(Logger $logger)
+    public function __construct(private readonly Logger $logger)
     {
-        $this->logger = $logger;
     }
 
-    public function onCreate(Created $event)
+    public function onCreate(Created $event): void
     {
         $permission = $event->getPermission();
 
@@ -29,7 +24,7 @@ class PermissionEventsSubscriber
         $this->logger->log($message);
     }
 
-    public function onUpdate(Updated $event)
+    public function onUpdate(Updated $event): void
     {
         $permission = $event->getPermission();
 
@@ -39,7 +34,7 @@ class PermissionEventsSubscriber
         $this->logger->log($message);
     }
 
-    public function onDelete(Deleted $event)
+    public function onDelete(Deleted $event): void
     {
         $permission = $event->getPermission();
 
@@ -51,10 +46,8 @@ class PermissionEventsSubscriber
 
     /**
      * Register the listeners for the subscriber.
-     *
-     * @param  \Illuminate\Events\Dispatcher  $events
      */
-    public function subscribe($events)
+    public function subscribe(Dispatcher $events): void
     {
         $class = self::class;
 

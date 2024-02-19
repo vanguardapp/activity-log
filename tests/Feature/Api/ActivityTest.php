@@ -4,10 +4,9 @@ namespace Vanguard\UserActivity\Tests\Feature\Api;
 
 use Facades\Tests\Setup\UserFactory;
 use Tests\Feature\ApiTestCase;
+use Vanguard\User;
 use Vanguard\UserActivity\Activity;
 use Vanguard\UserActivity\Http\Resources\ActivityResource;
-use Vanguard\UserActivity\Transformers\ActivityTransformer;
-use Vanguard\User;
 
 class ActivityTest extends ApiTestCase
 {
@@ -38,7 +37,7 @@ class ActivityTest extends ApiTestCase
 
         Activity::factory()->times(10)->create(['user_id' => $user2->id]);
 
-        $response = $this->actingAs($user, self::API_GUARD)->getJson("/api/activity");
+        $response = $this->actingAs($user, self::API_GUARD)->getJson('/api/activity');
 
         $transformed = ActivityResource::collection($activities->take(20))->resolve();
 
@@ -49,10 +48,10 @@ class ActivityTest extends ApiTestCase
                 'from' => 1,
                 'to' => 20,
                 'last_page' => 2,
-                'path' => url("api/activity"),
+                'path' => url('api/activity'),
                 'total' => 35,
                 'per_page' => 20,
-            ]
+            ],
         ]);
     }
 
@@ -63,18 +62,18 @@ class ActivityTest extends ApiTestCase
 
         $set1 = Activity::factory()->times(10)->create([
             'user_id' => $user->id,
-            'description' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
+            'description' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
         ]);
 
         $set2 = Activity::factory()->times(5)->create([
             'user_id' => $user->id,
-            'description' => 'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris...'
+            'description' => 'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris...',
         ]);
 
         $transformed = ActivityResource::collection($set2)->resolve();
 
         $response = $this->actingAs($user, self::API_GUARD)
-            ->getJson("/api/activity?filter[description]=minim&per_page=10&sort=created_at")
+            ->getJson('/api/activity?filter[description]=minim&per_page=10&sort=created_at')
             ->assertOk();
 
         $this->assertEquals($response->json('data'), $transformed);
@@ -86,8 +85,8 @@ class ActivityTest extends ApiTestCase
                 'last_page' => 1,
                 'total' => 5,
                 'per_page' => 10,
-                'path' => url('api/activity')
-            ]
+                'path' => url('api/activity'),
+            ],
         ]);
     }
 
@@ -95,7 +94,7 @@ class ActivityTest extends ApiTestCase
     public function paginate_activities_with_more_records_per_page_than_allowed()
     {
         $this->actingAs($this->getUser(), self::API_GUARD)
-            ->getJson("/api/activity?per_page=140")
+            ->getJson('/api/activity?per_page=140')
             ->assertStatus(422);
     }
 
@@ -119,10 +118,10 @@ class ActivityTest extends ApiTestCase
                 'from' => 1,
                 'to' => 20,
                 'last_page' => 2,
-                'path' => url("api/activity"),
+                'path' => url('api/activity'),
                 'total' => 25,
-                'per_page' => 20
-            ]
+                'per_page' => 20,
+            ],
         ]);
     }
 

@@ -65,7 +65,7 @@ class UserEventsSubscriberTest extends ListenerTestCase
         event(new \Vanguard\Events\User\Deleted($this->theUser));
 
         $message = sprintf(
-            "Deleted user %s.",
+            'Deleted user %s.',
             $this->theUser->present()->nameOrEmail
         );
 
@@ -78,7 +78,7 @@ class UserEventsSubscriberTest extends ListenerTestCase
         event(new \Vanguard\Events\User\Banned($this->theUser));
 
         $message = sprintf(
-            "Banned user %s.",
+            'Banned user %s.',
             $this->theUser->present()->nameOrEmail
         );
 
@@ -91,7 +91,7 @@ class UserEventsSubscriberTest extends ListenerTestCase
         event(new \Vanguard\Events\User\UpdatedByAdmin($this->theUser));
 
         $message = sprintf(
-            "Updated profile details for %s.",
+            'Updated profile details for %s.',
             $this->theUser->present()->nameOrEmail
         );
 
@@ -104,7 +104,7 @@ class UserEventsSubscriberTest extends ListenerTestCase
         event(new \Vanguard\Events\User\Created($this->theUser));
 
         $message = sprintf(
-            "Created an account for user %s.",
+            'Created an account for user %s.',
             $this->theUser->present()->nameOrEmail
         );
 
@@ -138,7 +138,7 @@ class UserEventsSubscriberTest extends ListenerTestCase
         event(new \Vanguard\Events\User\TwoFactorEnabledByAdmin($this->theUser));
 
         $message = sprintf(
-            "Enabled Two-Factor Authentication for user %s.",
+            'Enabled Two-Factor Authentication for user %s.',
             $this->theUser->present()->nameOrEmail
         );
 
@@ -151,7 +151,7 @@ class UserEventsSubscriberTest extends ListenerTestCase
         event(new \Vanguard\Events\User\TwoFactorDisabledByAdmin($this->theUser));
 
         $message = sprintf(
-            "Disabled Two-Factor Authentication for user %s.",
+            'Disabled Two-Factor Authentication for user %s.',
             $this->theUser->present()->nameOrEmail
         );
 
@@ -162,14 +162,14 @@ class UserEventsSubscriberTest extends ListenerTestCase
     public function onPasswordResetEmailRequest()
     {
         event(new \Vanguard\Events\User\RequestedPasswordResetEmail($this->user));
-        $this->assertMessageLogged("Requested password reset email.");
+        $this->assertMessageLogged('Requested password reset email.');
     }
 
     /** @test */
     public function onPasswordReset()
     {
         event(new \Illuminate\Auth\Events\PasswordReset($this->user));
-        $this->assertMessageLogged("Reseted password using \"Forgot Password\" option.");
+        $this->assertMessageLogged('Reseted password using "Forgot Password" option.');
     }
 
     /** @test */
@@ -177,7 +177,7 @@ class UserEventsSubscriberTest extends ListenerTestCase
     {
         $impersonated = factory(\Vanguard\User::class)->create([
             'first_name' => 'John',
-            'last_name' => 'Doe'
+            'last_name' => 'Doe',
         ]);
 
         event(new \Lab404\Impersonate\Events\TakeImpersonation($this->user, $impersonated));
@@ -190,7 +190,7 @@ class UserEventsSubscriberTest extends ListenerTestCase
     {
         $impersonated = factory(\Vanguard\User::class)->create([
             'first_name' => 'John',
-            'last_name' => 'Doe'
+            'last_name' => 'Doe',
         ]);
 
         event(new \Lab404\Impersonate\Events\LeaveImpersonation($this->user, $impersonated));

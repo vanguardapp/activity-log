@@ -4,32 +4,18 @@ namespace Vanguard\UserActivity\Http\Controllers\Api;
 
 use Auth;
 use Carbon\Carbon;
+use Illuminate\Http\JsonResponse;
 use Vanguard\Http\Controllers\Api\ApiController;
 use Vanguard\UserActivity\Repositories\Activity\ActivityRepository;
 
-/**
- * Class ActivityController
- * @package Vanguard\Http\Controllers\Api\Users
- */
 class StatsController extends ApiController
 {
-    /**
-     * @var ActivityRepository
-     */
-    private $activities;
-
-    public function __construct(ActivityRepository $activities)
+    public function __construct(private ActivityRepository $activities)
     {
         $this->middleware('auth');
-
-        $this->activities = $activities;
     }
 
-    /**
-     * Get activities for specified user.
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function show()
+    public function show(): JsonResponse
     {
         return $this->activities->userActivityForPeriod(
             Auth::user()->id,

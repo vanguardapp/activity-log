@@ -10,9 +10,8 @@ class ActivityResource extends JsonResource
      * Transform the resource into an array.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return array
      */
-    public function toArray($request)
+    public function toArray($request): array
     {
         $agent = app('agent');
         $agent->setUserAgent($this->resource->user_agent);
@@ -26,7 +25,7 @@ class ActivityResource extends JsonResource
             'platform' => $agent->platform(),
             'device' => $agent->device(),
             'description' => $this->description,
-            'created_at' => (string) $this->created_at
+            'created_at' => (string) $this->created_at,
         ];
     }
 }

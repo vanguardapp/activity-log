@@ -2,16 +2,18 @@
 
 namespace Vanguard\UserActivity\Repositories\Activity;
 
-use Vanguard\UserActivity\Activity;
 use Carbon\Carbon;
 use DB;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Vanguard\UserActivity\Activity;
 
 class EloquentActivity implements ActivityRepository
 {
     /**
      * {@inheritdoc}
      */
-    public function log($data)
+    public function log($data): Activity
     {
         return Activity::create($data);
     }
@@ -19,8 +21,11 @@ class EloquentActivity implements ActivityRepository
     /**
      * {@inheritdoc}
      */
-    public function paginateActivitiesForUser($userId, $perPage = 20, $search = null)
-    {
+    public function paginateActivitiesForUser(
+        int $userId,
+        int $perPage = 20,
+        ?string $search = null
+    ): LengthAwarePaginator {
         $query = Activity::where('user_id', $userId);
 
         return $this->paginateAndFilterResults($perPage, $search, $query);
@@ -29,7 +34,7 @@ class EloquentActivity implements ActivityRepository
     /**
      * {@inheritdoc}
      */
-    public function getLatestActivitiesForUser($userId, $activitiesCount = 10)
+    public function getLatestActivitiesForUser(int $userId, int $activitiesCount = 10): Collection
     {
         return Activity::where('user_id', $userId)
             ->orderBy('created_at', 'DESC')
@@ -40,20 +45,14 @@ class EloquentActivity implements ActivityRepository
     /**
      * {@inheritdoc}
      */
-    public function paginateActivities($perPage = 20, $search = null)
+    public function paginateActivities(int $perPage = 20, ?string $search = null): LengthAwarePaginator
     {
         $query = Activity::with('user');
 
         return $this->paginateAndFilterResults($perPage, $search, $query);
     }
 
-    /**
-     * @param $perPage
-     * @param $search
-     * @param $query
-     * @return mixed
-     */
-    private function paginateAndFilterResults($perPage, $search, $query)
+    private function paginateAndFilterResults($perPage, $search, $query): LengthAwarePaginator
     {
         if ($search) {
             $query->where('description', 'LIKE', "%$search%");
@@ -72,11 +71,11 @@ class EloquentActivity implements ActivityRepository
     /**
      * {@inheritdoc}
      */
-    public function userActivityForPeriod($userId, Carbon $from, Carbon $to)
+    public function userActivityForPeriod($userId, Carbon $from, Carbon $to): Collection
     {
         $result = Activity::select([
-            DB::raw("DATE(created_at) as day"),
-            DB::raw('count(id) as count')
+            DB::raw('DATE(created_at) as day'),
+            DB::raw('count(id) as count'),
         ])
             ->where('user_id', $userId)
             ->whereBetween('created_at', [$from, $to])

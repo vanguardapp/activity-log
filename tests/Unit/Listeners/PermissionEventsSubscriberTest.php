@@ -2,11 +2,9 @@
 
 namespace Vanguard\UserActivity\Tests\Unit\Listeners;
 
-use Mockery as m;
 use Vanguard\Events\Permission\Created;
 use Vanguard\Events\Permission\Deleted;
 use Vanguard\Events\Permission\Updated;
-use \Vanguard\UserActivity\Tests\Unit\Listeners\ListenerTestCase;
 
 class PermissionEventsSubscriberTest extends ListenerTestCase
 {

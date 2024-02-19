@@ -2,9 +2,9 @@
 
 namespace Vanguard\UserActivity\Database\Seeders;
 
+use Illuminate\Database\Seeder;
 use Vanguard\Permission;
 use Vanguard\Role;
-use Illuminate\Database\Seeder;
 
 class ActivityPermissionsSeeder extends Seeder
 {
@@ -21,7 +21,7 @@ class ActivityPermissionsSeeder extends Seeder
             'name' => 'users.activity',
             'display_name' => 'View System Activity Log',
             'description' => 'View activity log for all system users.',
-            'removable' => false
+            'removable' => false,
         ]);
 
         $adminRole->attachPermission($permission);

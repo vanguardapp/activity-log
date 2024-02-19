@@ -19,21 +19,19 @@ class UserActivity extends Plugin
     /**
      * {@inheritDoc}
      */
-    public function sidebar()
+    public function sidebar(): Item
     {
         return Item::create(__('Activity Log'))
             ->route('activity.index')
             ->icon('fas fa-server')
-            ->active("activity*")
+            ->active('activity*')
             ->permissions('users.activity');
     }
 
     /**
      * Register services.
-     *
-     * @return void
      */
-    public function register()
+    public function register(): void
     {
         $this->app->singleton(ActivityRepository::class, EloquentActivity::class);
     }
@@ -41,17 +39,17 @@ class UserActivity extends Plugin
     /**
      * Bootstrap services.
      *
-     * @return void
+     *
      * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
-    public function boot()
+    public function boot(): void
     {
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'user-activity');
         $this->loadTranslationsFrom(__DIR__.'/../resources/lang', 'user-activity');
         $this->loadJsonTranslationsFrom(__DIR__.'/../resources/lang');
 
         $this->publishes([
-            __DIR__ . '/../database/migrations' => database_path('migrations')
+            __DIR__.'/../database/migrations' => database_path('migrations'),
         ], 'migrations');
 
         $this->app->booted(function () {
@@ -70,34 +68,34 @@ class UserActivity extends Plugin
     /**
      * Map web plugin related routes.
      */
-    protected function mapWebRoutes()
+    protected function mapWebRoutes(): void
     {
         Route::group([
             'namespace' => 'Vanguard\UserActivity\Http\Controllers\Web',
             'middleware' => 'web',
         ], function () {
-            $this->loadRoutesFrom(__DIR__ . '/../routes/web.php');
+            $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
         });
     }
 
     /**
      * Map API plugin related routes.
      */
-    protected function mapApiRoutes()
+    protected function mapApiRoutes(): void
     {
         Route::group([
             'namespace' => 'Vanguard\UserActivity\Http\Controllers\Api',
             'middleware' => 'api',
             'prefix' => 'api',
         ], function () {
-            $this->loadRoutesFrom(__DIR__ . '/../routes/api.php');
+            $this->loadRoutesFrom(__DIR__.'/../routes/api.php');
         });
     }
 
     /**
      * Register event subscribers for the plugin.
      */
-    private function registerEventListeners()
+    private function registerEventListeners(): void
     {
         Event::subscribe(PermissionEventsSubscriber::class);
         Event::subscribe(RoleEventsSubscriber::class);
@@ -107,7 +105,7 @@ class UserActivity extends Plugin
     /**
      * Attach view composers to add necessary data to the view.
      */
-    private function attachViewComposers()
+    private function attachViewComposers(): void
     {
         View::composer('user.view', ShowUserComposer::class);
     }

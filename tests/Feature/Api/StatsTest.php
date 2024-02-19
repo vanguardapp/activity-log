@@ -21,7 +21,7 @@ class StatsTest extends ApiTestCase
         Carbon::setTestNow(null);
         Activity::factory()->times(5)->create(['user_id' => $user->id]);
 
-        $response = $this->actingAs($user, self::API_GUARD)->getJson("/api/stats/activity");
+        $response = $this->actingAs($user, self::API_GUARD)->getJson('/api/stats/activity');
 
         $expected = app(ActivityRepository::class)->userActivityForPeriod(
             $user->id,

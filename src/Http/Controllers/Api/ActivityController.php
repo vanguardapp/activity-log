@@ -4,15 +4,11 @@ namespace Vanguard\UserActivity\Http\Controllers\Api;
 
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
-use Vanguard\UserActivity\Http\Resources\ActivityResource;
+use Vanguard\Http\Controllers\Api\ApiController;
 use Vanguard\UserActivity\Activity;
 use Vanguard\UserActivity\Http\Requests\GetActivitiesRequest;
-use Vanguard\Http\Controllers\Api\ApiController;
+use Vanguard\UserActivity\Http\Resources\ActivityResource;
 
-/**
- * Class ActivityController
- * @package Vanguard\Http\Controllers\Api
- */
 class ActivityController extends ApiController
 {
     public function __construct()
@@ -23,16 +19,14 @@ class ActivityController extends ApiController
 
     /**
      * Paginate user activities.
-     * @param GetActivitiesRequest $request
-     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
      */
-    public function index(GetActivitiesRequest $request)
+    public function index(GetActivitiesRequest $request): \Illuminate\Http\Resources\Json\AnonymousResourceCollection
     {
         $activities = QueryBuilder::for(Activity::class)
             ->allowedIncludes('user')
             ->allowedFilters([
                 AllowedFilter::partial('description'),
-                AllowedFilter::exact('user', 'user_id')
+                AllowedFilter::exact('user', 'user_id'),
             ])
             ->allowedSorts('created_at')
             ->defaultSort('-created_at')

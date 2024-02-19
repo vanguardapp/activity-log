@@ -25,7 +25,7 @@ class ListenerTestCase extends TestCase
             'user_id' => $user ? $user->id : $this->user->id,
             'ip_address' => \Request::ip(),
             'user_agent' => \Request::header('User-agent'),
-            'description' => $msg
+            'description' => $msg,
         ]);
     }
 }

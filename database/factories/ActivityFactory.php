@@ -3,8 +3,8 @@
 namespace Vanguard\UserActivity\Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Vanguard\UserActivity\Activity;
 use Vanguard\User;
+use Vanguard\UserActivity\Activity;
 
 class ActivityFactory extends Factory
 {
@@ -17,18 +17,14 @@ class ActivityFactory extends Factory
 
     /**
      * Define the model's default state.
-     *
-     * @return array
      */
-    public function definition()
+    public function definition(): array
     {
         return [
-            'user_id' => function () {
-                return User::factory()->create()->id;
-            },
+            'user_id' => User::factory(),
             'description' => substr($this->faker->paragraph, 0, 255),
             'ip_address' => $this->faker->ipv4,
-            'user_agent' => $this->faker->userAgent
+            'user_agent' => $this->faker->userAgent,
         ];
     }
 }

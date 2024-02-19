@@ -8,23 +8,18 @@ class GetActivitiesRequest extends Request
 {
     /**
      * Get the validation rules that apply to the request.
-     *
-     * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return [
-            'per_page' => 'integer|max:100'
+            'per_page' => 'integer|max:100',
         ];
     }
 
-    /**
-     * @return array
-     */
-    public function messages()
+    public function messages(): array
     {
         return [
-            'per_page.max' => __('Maximum number of records per page is 100.')
+            'per_page.max' => __('Maximum number of records per page is 100.'),
         ];
     }
 }

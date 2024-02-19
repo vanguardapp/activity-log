@@ -7,17 +7,11 @@ use Vanguard\UserActivity\Repositories\Activity\ActivityRepository;
 
 class ShowUserComposer
 {
-    /**
-     * @var ActivityRepository
-     */
-    private $activity;
-
-    public function __construct(ActivityRepository $activity)
+    public function __construct(private readonly ActivityRepository $activity)
     {
-        $this->activity = $activity;
     }
 
-    public function compose(View $view)
+    public function compose(View $view): void
     {
         $user = $view->getData()['user'];
 
