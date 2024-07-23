@@ -7,5 +7,5 @@
         actions: "{{ __('actions')  }}"
     };
 </script>
-{!! HTML::script('assets/js/chart.min.js') !!}
-{!! HTML::script('assets/js/as/dashboard-default.js') !!}
+<script src="{{ asset('assets/js/chart.min.js') }}"></script>
+<script src="{{ asset('assets/js/as/dashboard-default.js') }}"></script>
