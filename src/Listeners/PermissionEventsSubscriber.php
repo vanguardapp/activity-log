@@ -7,6 +7,7 @@ use Vanguard\Events\Permission\Created;
 use Vanguard\Events\Permission\Deleted;
 use Vanguard\Events\Permission\Updated;
 use Vanguard\UserActivity\Logger;
+use Vanguard\UserActivity\Support\Enum\ActivityTypes;
 
 class PermissionEventsSubscriber
 {
@@ -19,9 +20,8 @@ class PermissionEventsSubscriber
         $permission = $event->getPermission();
 
         $name = $permission->display_name ?: $permission->name;
-        $message = trans('user-activity::log.new_permission', ['name' => $name]);
 
-        $this->logger->log($message);
+        $this->logger->log(ActivityTypes::NEW_PERMISSION, ['name' => $name]);
     }
 
     public function onUpdate(Updated $event): void
@@ -29,9 +29,8 @@ class PermissionEventsSubscriber
         $permission = $event->getPermission();
 
         $name = $permission->display_name ?: $permission->name;
-        $message = trans('user-activity::log.updated_permission', ['name' => $name]);
 
-        $this->logger->log($message);
+        $this->logger->log(ActivityTypes::UPDATED_PERMISSION, ['name' => $name]);
     }
 
     public function onDelete(Deleted $event): void
@@ -39,9 +38,8 @@ class PermissionEventsSubscriber
         $permission = $event->getPermission();
 
         $name = $permission->display_name ?: $permission->name;
-        $message = trans('user-activity::log.deleted_permission', ['name' => $name]);
 
-        $this->logger->log($message);
+        $this->logger->log(ActivityTypes::DELETED_PERMISSION, ['name' => $name]);
     }
 
     /**
