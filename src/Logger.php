@@ -21,7 +21,7 @@ class Logger
     /**
      * Log user action.
      */
-    public function log($description, $additional_data = []): Activity
+    public function log($description, $additional_data = null): Activity
     {
         return $this->activities->log([
             'description' => $description,
