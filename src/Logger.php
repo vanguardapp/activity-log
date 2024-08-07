@@ -25,7 +25,7 @@ class Logger
     {
         return $this->activities->log([
             'description' => $description,
-            'additional_data' => $additional_data ? json_encode($additional_data) : null,
+            'additional_data' => $additional_data ?? null,
             'user_id' => $this->getUserId(),
             'ip_address' => $this->request->ip(),
             'user_agent' => $this->getUserAgent(),

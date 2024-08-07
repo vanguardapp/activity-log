@@ -76,7 +76,7 @@
                                 </td>
                             @endif
                             <td>{{ $activity->ip_address }}</td>
-                            <td>{{ $activity->description }}</td>
+                            <td>{{ __($activity->description, $activity->additional_data ?? []) }}</td>
                             <td>{{ $activity->created_at->format(config('app.date_time_format')) }}</td>
                             <td class="text-center">
                                 <a tabindex="0" role="button" class="btn btn-icon"
