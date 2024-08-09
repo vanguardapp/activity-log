@@ -21,32 +21,35 @@
 @section('content')
 
     <div class="card">
-    <div class="card-body">
-        <form action="" method="GET" id="users-form" class="border-bottom-light mb-3">
-            <div class="row justify-content-between mt-3 mb-4">
-                <div class="col-lg-5 col-md-6">
-                    <div class="input-group custom-search-form">
-                        <input type="text"
-                               class="form-control input-solid"
-                               name="search"
-                               value="{{ Request::get('search') }}"
-                               placeholder="@lang('Search for Action')">
+        <div class="card-body">
+            <form action="" method="GET" id="users-form" class="border-bottom-light mb-3">
+                <div class="row justify-content-between mt-3 mb-4">
+                    <div class="col-lg-5 col-md-6">
+                        <div class="input-group custom-search-form">
+                            <select class="form-control input-solid" name="search">
+                                <option value="">@lang('Search for Action')</option>
+                                @foreach (\Vanguard\UserActivity\Support\Enum\ActivityTypes::getConstants() as $key => $value)
+                                    <option value="{{ $value }}" {{ Request::get('search') == $value ? 'selected' : '' }}>
+                                        @lang($value)
+                                    </option>
+                                @endforeach
+                            </select>
 
-                        <span class="input-group-append">
+                            <span class="input-group-append">
                             @if (Request::has('search') && Request::get('search') != '')
-                                <a href="{{ isset($adminView) ? route('activity.index') : route('profile.activity') }}"
-                                   class="btn btn-light d-flex align-items-center"
-                                   role="button">
+                                    <a href="{{ isset($adminView) ? route('activity.index') : route('profile.activity') }}"
+                                       class="btn btn-light d-flex align-items-center"
+                                       role="button">
                                     <i class="fas fa-times text-muted"></i>
                                 </a>
-                            @endif
+                                @endif
                             <button class="btn btn-light" type="submit" id="search-activities-btn">
                                 <i class="fas fa-search text-muted"></i>
                             </button>
                         </span>
+                        </div>
                     </div>
                 </div>
-            </div>
         </form>
 
         <div class="table-responsive">

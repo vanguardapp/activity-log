@@ -2,8 +2,6 @@
 
 namespace Vanguard\UserActivity\Support\Enum;
 
-namespace Vanguard\UserActivity\Support\Enum;
-
 class ActivityTypes
 {
     const NEW_PERMISSION = 'new_permission';
@@ -34,4 +32,10 @@ class ActivityTypes
 
     const STARTED_IMPERSONATING = 'started_impersonating';
     const STOPPED_IMPERSONATING = 'stopped_impersonating';
+
+    public static function getConstants()
+    {
+        $reflector = new \ReflectionClass(static::class);
+        return $reflector->getConstants();
+    }
 }
