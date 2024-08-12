@@ -3,7 +3,6 @@
 namespace Vanguard\UserActivity\Http\Controllers\Web;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 use Vanguard\Http\Controllers\Controller;
 use Vanguard\UserActivity\Repositories\Activity\ActivityRepository;
@@ -23,8 +22,7 @@ class ActivityController extends Controller
 
         return view('user-activity::index', [
             'adminView' => true,
-            'activities' => $activities,
-            'users' => DB::table('users')->get()
+            'activities' => $activities
         ]);
     }
 }
