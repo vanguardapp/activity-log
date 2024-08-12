@@ -18,7 +18,7 @@ class ActivityController extends Controller
      */
     public function index(Request $request): View
     {
-        $activities = $this->activities->paginateActivities(perPage: 20, search: $request->search, user_id: $request->user_id);
+        $activities = $this->activities->paginateActivities(perPage: 20, search: $request->search, name: $request->name);
 
         return view('user-activity::index', [
             'adminView' => true,

@@ -30,18 +30,15 @@
                                 <option value="">@lang('Search for Action')</option>
                                 @foreach (\Vanguard\UserActivity\Support\Enum\ActivityTypes::getConstants() as $key => $value)
                                     <option value="{{ $value }}" {{ Request::get('search') == $value ? 'selected' : '' }}>
-                                        @lang($value)
+                                        @lang($value, ['name' => '{' . __('Name') . '}' ])
                                     </option>
                                 @endforeach
                             </select>
-                            <select class="form-control input-solid" name="user_id">
-                                <option value="">@lang('Search for User')</option>
-                                @foreach ($users as $key => $vg_user)
-                                    <option value="{{ $vg_user->id }}" {{ Request::get('user_id') == $vg_user->id ? 'selected' : '' }}>
-                                        {{ $vg_user->first_name . ' ' . $vg_user->last_name }}
-                                    </option>
-                                @endforeach
-                            </select>
+                            <input type="text"
+                                   class="form-control input-solid"
+                                   name="name"
+                                   value="{{ Request::get('name') }}"
+                                   placeholder="@lang('Search for User')">
 
                             <span class="input-group-append">
                             @if (Request::has('search') && Request::get('search') != '')
