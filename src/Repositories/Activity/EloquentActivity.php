@@ -46,12 +46,10 @@ class EloquentActivity implements ActivityRepository
     /**
      * {@inheritdoc}
      */
-    public function paginateActivities(int $perPage = 20, ?string $search = null, ?string $name = null): LengthAwarePaginator
+    public function paginateActivities(int $perPage = 20, ?string $search = null, ?int $user_id = null): LengthAwarePaginator
     {
         $query = Activity::with('user')
-            ->when($name,
-                fn($q) => $q->whereRaw('LOWER(JSON_EXTRACT(additional_data, "$.name")) LIKE ?', ['%' . strtolower($name) . '%'])
-            );
+            ->when($user_id, fn ($q) => $q->where('user_id', '=', $user_id));
 
         return $this->paginateAndFilterResults($perPage, $search, $query);
     }

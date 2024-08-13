@@ -26,7 +26,7 @@
                 <div class="row justify-content-between mt-3 mb-4">
                     <div class="col-lg-5 col-md-6">
                         <div class="input-group custom-search-form">
-                            <select class="form-control input-solid" name="search">
+                            <select class="form-control" name="search">
                                 <option value="">@lang('Search for Action')</option>
                                 @foreach (\Vanguard\UserActivity\Support\Enum\ActivityTypes::getConstants() as $key => $value)
                                     <option value="{{ $value }}" {{ Request::get('search') == $value ? 'selected' : '' }}>
@@ -34,11 +34,9 @@
                                     </option>
                                 @endforeach
                             </select>
-                            <input type="text"
-                                   class="form-control input-solid"
-                                   name="name"
-                                   value="{{ Request::get('name') }}"
-                                   placeholder="@lang('Search for User')">
+                            <select id="user_id" class="form-control user-select" name="user_id">
+                                <option value="">@lang('Search for User')</option>
+                            </select>
 
                             <span class="input-group-append">
                             @if (Request::has('search') && Request::get('search') != '')
@@ -101,8 +99,48 @@
                 </tbody>
             </table>
         </div>
+        </div>
     </div>
-</div>
 
-{!! $activities->render() !!}
+    {!! $activities->render() !!}
+@stop
+
+@section('scripts')
+    <script>
+        $(document).ready(function () {
+            let selectedUserId = {{ $selectedUser->id ?? 'null' }};
+            let selectedUserText = "{{ ($selectedUser->first_name ?? '') . ' ' . ($selectedUser->last_name ?? '') }}";
+
+            $('.user-select').select2({
+                allowClear: true,
+                ajax: {
+                    url: '{{ route('users.list') }}',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            search: params.term
+                        };
+                    },
+                    processResults: function (response) {
+                        return {
+                            results: $.map(response?.data, function (item) {
+                                return {
+                                    text: (item.first_name ?? '') + ' ' + (item.last_name ?? ''),
+                                    id: item.id
+                                }
+                            })
+                        };
+                    },
+                    cache: true
+                },
+                placeholder: '@lang("Search for User")',
+                minimumInputLength: 2,
+            });
+
+            if (selectedUserId) {
+                let newOption = new Option(selectedUserText, selectedUserId, true, true);
+                $('.user-select').append(newOption).trigger('change');
+            }
+        });
+    </script>
 @stop
