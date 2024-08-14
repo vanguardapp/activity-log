@@ -34,7 +34,11 @@
                                     </option>
                                 @endforeach
                             </select>
-                            <select id="user_id" class="form-control user-select" name="user_id">
+                            <select id="user-select" class="form-control user-select" name="userId"
+                                    data-url="{{ route('users.list') }}"
+                                    data-placeholder="@lang('Search for User')"
+                                    data-selected-id="{{ $selectedUser->id ?? '' }}"
+                                    data-selected-text="{{ ($selectedUser->first_name ?? '') . ' ' . ($selectedUser->last_name ?? '') }}">
                                 <option value="">@lang('Search for User')</option>
                             </select>
 
@@ -106,41 +110,5 @@
 @stop
 
 @section('scripts')
-    <script>
-        $(document).ready(function () {
-            let selectedUserId = {{ $selectedUser->id ?? 'null' }};
-            let selectedUserText = "{{ ($selectedUser->first_name ?? '') . ' ' . ($selectedUser->last_name ?? '') }}";
-
-            $('.user-select').select2({
-                allowClear: true,
-                ajax: {
-                    url: '{{ route('users.list') }}',
-                    delay: 250,
-                    data: function (params) {
-                        return {
-                            search: params.term
-                        };
-                    },
-                    processResults: function (response) {
-                        return {
-                            results: $.map(response?.data, function (item) {
-                                return {
-                                    text: (item.first_name ?? '') + ' ' + (item.last_name ?? ''),
-                                    id: item.id
-                                }
-                            })
-                        };
-                    },
-                    cache: true
-                },
-                placeholder: '@lang("Search for User")',
-                minimumInputLength: 2,
-            });
-
-            if (selectedUserId) {
-                let newOption = new Option(selectedUserText, selectedUserId, true, true);
-                $('.user-select').append(newOption).trigger('change');
-            }
-        });
-    </script>
+    <script src="{{ asset('assets/js/as/user-activity.js') }}"></script>
 @stop
