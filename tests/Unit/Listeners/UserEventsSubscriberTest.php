@@ -20,14 +20,14 @@ class UserEventsSubscriberTest extends ListenerTestCase
     public function onLogin()
     {
         event(new \Vanguard\Events\User\LoggedIn);
-        $this->assertMessageLogged('Logged in.');
+        $this->assertMessageLogged('logged_in');
     }
 
     /** @test */
     public function onLogout()
     {
         event(new \Vanguard\Events\User\LoggedOut());
-        $this->assertMessageLogged('Logged out.');
+        $this->assertMessageLogged('logged_out');
     }
 
     /** @test */
@@ -42,21 +42,21 @@ class UserEventsSubscriberTest extends ListenerTestCase
 
         event(new \Illuminate\Auth\Events\Registered($user));
 
-        $this->assertMessageLogged('Created an account.', $user);
+        $this->assertMessageLogged('created_account', $user);
     }
 
     /** @test */
     public function onAvatarChange()
     {
         event(new \Vanguard\Events\User\ChangedAvatar);
-        $this->assertMessageLogged('Updated profile avatar.');
+        $this->assertMessageLogged('updated_avatar');
     }
 
     /** @test */
     public function onProfileDetailsUpdate()
     {
         event(new \Vanguard\Events\User\UpdatedProfileDetails);
-        $this->assertMessageLogged('Updated profile details.');
+        $this->assertMessageLogged('updated_profile');
     }
 
     /** @test */
@@ -64,12 +64,7 @@ class UserEventsSubscriberTest extends ListenerTestCase
     {
         event(new \Vanguard\Events\User\Deleted($this->theUser));
 
-        $message = sprintf(
-            'Deleted user %s.',
-            $this->theUser->present()->nameOrEmail
-        );
-
-        $this->assertMessageLogged($message);
+        $this->assertMessageLogged('deleted_user', additional_data: ['name' => $this->theUser->present()->nameOrEmail]);
     }
 
     /** @test */
@@ -77,12 +72,7 @@ class UserEventsSubscriberTest extends ListenerTestCase
     {
         event(new \Vanguard\Events\User\Banned($this->theUser));
 
-        $message = sprintf(
-            'Banned user %s.',
-            $this->theUser->present()->nameOrEmail
-        );
-
-        $this->assertMessageLogged($message);
+        $this->assertMessageLogged('banned_user', additional_data: ['name' => $this->theUser->present()->nameOrEmail]);
     }
 
     /** @test */
@@ -90,12 +80,7 @@ class UserEventsSubscriberTest extends ListenerTestCase
     {
         event(new \Vanguard\Events\User\UpdatedByAdmin($this->theUser));
 
-        $message = sprintf(
-            'Updated profile details for %s.',
-            $this->theUser->present()->nameOrEmail
-        );
-
-        $this->assertMessageLogged($message);
+        $this->assertMessageLogged('updated_profile_details_for', additional_data: ['name' => $this->theUser->present()->nameOrEmail]);
     }
 
     /** @test */
@@ -103,33 +88,28 @@ class UserEventsSubscriberTest extends ListenerTestCase
     {
         event(new \Vanguard\Events\User\Created($this->theUser));
 
-        $message = sprintf(
-            'Created an account for user %s.',
-            $this->theUser->present()->nameOrEmail
-        );
-
-        $this->assertMessageLogged($message);
+        $this->assertMessageLogged('created_account_for', additional_data: ['name' => $this->theUser->present()->nameOrEmail]);
     }
 
     /** @test */
     public function onSettingsUpdate()
     {
         event(new \Vanguard\Events\Settings\Updated);
-        $this->assertMessageLogged('Updated website settings.');
+        $this->assertMessageLogged('updated_settings');
     }
 
     /** @test */
     public function onTwoFactorEnable()
     {
         event(new \Vanguard\Events\User\TwoFactorEnabled);
-        $this->assertMessageLogged('Enabled Two-Factor Authentication.');
+        $this->assertMessageLogged('enabled_2fa');
     }
 
     /** @test */
     public function onTwoFactorDisable()
     {
         event(new \Vanguard\Events\User\TwoFactorDisabled);
-        $this->assertMessageLogged('Disabled Two-Factor Authentication.');
+        $this->assertMessageLogged('disabled_2fa');
     }
 
     /** @test */
@@ -137,12 +117,7 @@ class UserEventsSubscriberTest extends ListenerTestCase
     {
         event(new \Vanguard\Events\User\TwoFactorEnabledByAdmin($this->theUser));
 
-        $message = sprintf(
-            'Enabled Two-Factor Authentication for user %s.',
-            $this->theUser->present()->nameOrEmail
-        );
-
-        $this->assertMessageLogged($message);
+        $this->assertMessageLogged('enabled_2fa_for', additional_data: ['name' => $this->theUser->present()->nameOrEmail]);
     }
 
     /** @test */
@@ -150,26 +125,21 @@ class UserEventsSubscriberTest extends ListenerTestCase
     {
         event(new \Vanguard\Events\User\TwoFactorDisabledByAdmin($this->theUser));
 
-        $message = sprintf(
-            'Disabled Two-Factor Authentication for user %s.',
-            $this->theUser->present()->nameOrEmail
-        );
-
-        $this->assertMessageLogged($message);
+        $this->assertMessageLogged('disabled_2fa_for', additional_data: ['name' => $this->theUser->present()->nameOrEmail]);
     }
 
     /** @test */
     public function onPasswordResetEmailRequest()
     {
         event(new \Vanguard\Events\User\RequestedPasswordResetEmail($this->user));
-        $this->assertMessageLogged('Requested password reset email.');
+        $this->assertMessageLogged('requested_password_reset');
     }
 
     /** @test */
     public function onPasswordReset()
     {
         event(new \Illuminate\Auth\Events\PasswordReset($this->user));
-        $this->assertMessageLogged('Reseted password using "Forgot Password" option.');
+        $this->assertMessageLogged('reseted_password');
     }
 
     /** @test */
@@ -182,7 +152,7 @@ class UserEventsSubscriberTest extends ListenerTestCase
 
         event(new \Lab404\Impersonate\Events\TakeImpersonation($this->user, $impersonated));
 
-        $this->assertMessageLogged("Started impersonating user John Doe (ID: {$impersonated->id})");
+        $this->assertMessageLogged('started_impersonating', additional_data: ['id' => $impersonated->id, 'name' => 'John Doe']);
     }
 
     /** @test */
@@ -195,6 +165,6 @@ class UserEventsSubscriberTest extends ListenerTestCase
 
         event(new \Lab404\Impersonate\Events\LeaveImpersonation($this->user, $impersonated));
 
-        $this->assertMessageLogged("Stopped impersonating user John Doe (ID: {$impersonated->id})");
+        $this->assertMessageLogged('stopped_impersonating', additional_data: ['id' => $impersonated->id, 'name' => 'John Doe']);
     }
 }

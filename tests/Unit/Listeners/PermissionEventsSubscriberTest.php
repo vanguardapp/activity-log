@@ -19,13 +19,14 @@ class PermissionEventsSubscriberTest extends \Vanguard\UserActivity\Tests\Unit\L
         $this->perm = \Vanguard\Permission::factory()->create();
     }
 
-    protected function assertMessageLogged($msg, $user = null): void
+    protected function assertMessageLogged($msg, $user = null, $additional_data = null): void
     {
         $this->assertDatabaseHas('user_activity', [
             'user_id' => $user ? $user->id : $this->user->id,
             'ip_address' => \Request::ip(),
             'user_agent' => \Request::header('User-agent'),
             'description' => $msg,
+            'additional_data' => $additional_data ? json_encode($additional_data) : null
         ]);
     }
 
@@ -33,20 +34,20 @@ class PermissionEventsSubscriberTest extends \Vanguard\UserActivity\Tests\Unit\L
     public function onCreate()
     {
         event(new Created($this->perm));
-        $this->assertMessageLogged("Created new permission called {$this->perm->display_name}.");
+        $this->assertMessageLogged('new_permission', additional_data: ['name' => $this->perm->display_name]);
     }
 
     /** @test */
     public function onUpdate()
     {
         event(new Updated($this->perm));
-        $this->assertMessageLogged("Updated the permission named {$this->perm->display_name}.");
+        $this->assertMessageLogged('updated_permission', additional_data: ['name' => $this->perm->display_name]);
     }
 
     /** @test */
     public function onDelete()
     {
         event(new Deleted($this->perm));
-        $this->assertMessageLogged("Deleted permission named {$this->perm->display_name}.");
+        $this->assertMessageLogged('deleted_permission', additional_data: ['name' => $this->perm->display_name]);
     }
 }

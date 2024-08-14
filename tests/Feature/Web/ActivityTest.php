@@ -69,4 +69,20 @@ class ActivityTest extends TestCase
             ->assertSee('foo')
             ->assertDontSee('barrr');
     }
+
+    /** @test */
+    public function search_activities_for_specific_user()
+    {
+        $this->withoutMiddleware();
+
+        $user = UserFactory::create();
+        $this->be($user);
+
+        $this->logger->log('foo');
+        $this->logger->log('barrr');
+
+        $this->get('activity?user_id='.$user->id)
+            ->assertSee('foo')
+            ->assertSee('barrr');
+    }
 }

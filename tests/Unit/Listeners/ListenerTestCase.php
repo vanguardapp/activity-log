@@ -19,13 +19,14 @@ abstract class ListenerTestCase extends TestCase
         $this->be($this->user);
     }
 
-    protected function assertMessageLogged($msg, $user = null): void
+    protected function assertMessageLogged($msg, $user = null, $additional_data = null): void
     {
         $this->assertDatabaseHas('user_activity', [
             'user_id' => $user ? $user->id : $this->user->id,
             'ip_address' => \Request::ip(),
             'user_agent' => \Request::header('User-agent'),
             'description' => $msg,
+            'additional_data' => $additional_data ? json_encode($additional_data) : null
         ]);
     }
 }

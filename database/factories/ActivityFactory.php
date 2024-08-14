@@ -25,6 +25,7 @@ class ActivityFactory extends Factory
             'description' => substr($this->faker->paragraph, 0, 255),
             'ip_address' => $this->faker->ipv4,
             'user_agent' => $this->faker->userAgent,
+            'additional_data' => null,
         ];
     }
 }
