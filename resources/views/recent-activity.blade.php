@@ -27,7 +27,7 @@
                 <tbody>
                 @foreach($activities as $activity)
                     <tr>
-                        <td>{{ __($activity->description, $activity->additional_data ?? [] }}</td>
+                        <td>{{ __($activity->description, $activity->additional_data ?? []) }}</td>
                         <td>{{ $activity->created_at->format(config('app.date_time_format')) }}</td>
                     </tr>
                 @endforeach
