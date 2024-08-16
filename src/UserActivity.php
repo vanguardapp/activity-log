@@ -63,6 +63,8 @@ class UserActivity extends Plugin
         $this->attachViewComposers();
 
         $this->registerEventListeners();
+
+        $this->publishAssets();
     }
 
     /**
@@ -108,5 +110,15 @@ class UserActivity extends Plugin
     private function attachViewComposers(): void
     {
         View::composer('user.view', ShowUserComposer::class);
+    }
+
+    /**
+     * Publish public assets.
+     */
+    protected function publishAssets(): void
+    {
+        $this->publishes([
+            realpath(__DIR__.'/../dist') => $this->app['path.public'].'/vendor/plugins/activity-log',
+        ], 'public');
     }
 }

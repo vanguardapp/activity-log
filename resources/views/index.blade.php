@@ -18,6 +18,10 @@
     @endif
 @stop
 
+@section('styles')
+    <link rel="stylesheet" href="{{ url('vendor/plugins/activity-log/css/activity-log.css') }}">
+@stop
+
 @section('content')
 
     <div class="card">
@@ -110,5 +114,5 @@
 @stop
 
 @section('scripts')
-    <script src="{{ asset('assets/js/as/user-activity.js') }}"></script>
+    <script src="{{ url("vendor/plugins/activity-log/js/activity-log.js") }}"></script>
 @stop
