@@ -19,6 +19,7 @@
 @stop
 
 @section('styles')
+    <link rel="stylesheet" href="{{ url('vendor/plugins/activity-log/css/vendor.css') }}">
     <link rel="stylesheet" href="{{ url('vendor/plugins/activity-log/css/activity-log.css') }}">
 @stop
 
@@ -114,5 +115,6 @@
 @stop
 
 @section('scripts')
+    <script src="{{ url("vendor/plugins/activity-log/js/vendor.js") }}"></script>
     <script src="{{ url("vendor/plugins/activity-log/js/activity-log.js") }}"></script>
 @stop
