@@ -26,6 +26,7 @@ class ActivityResource extends JsonResource
             'device' => $agent->device(),
             'description' => $this->description,
             'created_at' => (string) $this->created_at,
+            'additional_data' => $this->additional_data
         ];
     }
 }

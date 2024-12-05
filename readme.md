@@ -36,7 +36,7 @@ As soon as your plugin is registered, you should publish the
 plugins migrations by running the following command:
 
 ```
-php artisan vendor:publish --provider="Vanguard\UserActivity\UserActivity"  --tag="migrations"
+php artisan vendor:publish --provider="Vanguard\UserActivity\UserActivity" --tag="public" --tag="migrations"
 ```
 
 And, as the last step of the installation, you will need to

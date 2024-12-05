@@ -8,6 +8,7 @@ use Vanguard\Events\Role\Deleted;
 use Vanguard\Events\Role\PermissionsUpdated;
 use Vanguard\Events\Role\Updated;
 use Vanguard\UserActivity\Logger;
+use Vanguard\UserActivity\Support\Enum\ActivityTypes;
 
 class RoleEventsSubscriber
 {
@@ -17,37 +18,22 @@ class RoleEventsSubscriber
 
     public function onCreate(Created $event): void
     {
-        $message = trans(
-            'user-activity::log.new_role',
-            ['name' => $event->getRole()->display_name]
-        );
-
-        $this->logger->log($message);
+        $this->logger->log(ActivityTypes::NEW_ROLE, ['name' => $event->getRole()->display_name]);
     }
 
     public function onUpdate(Updated $event): void
     {
-        $message = trans(
-            'user-activity::log.updated_role',
-            ['name' => $event->getRole()->display_name]
-        );
-
-        $this->logger->log($message);
+        $this->logger->log(ActivityTypes::UPDATED_ROLE, ['name' => $event->getRole()->display_name]);
     }
 
     public function onDelete(Deleted $event): void
     {
-        $message = trans(
-            'user-activity::log.deleted_role',
-            ['name' => $event->getRole()->display_name]
-        );
-
-        $this->logger->log($message);
+        $this->logger->log(ActivityTypes::DELETED_ROLE, ['name' => $event->getRole()->display_name]);
     }
 
     public function onPermissionsUpdate(PermissionsUpdated $event): void
     {
-        $this->logger->log(trans('user-activity::log.updated_role_permissions'));
+        $this->logger->log(ActivityTypes::UPDATED_ROLE_PERMISSIONS);
     }
 
     /**

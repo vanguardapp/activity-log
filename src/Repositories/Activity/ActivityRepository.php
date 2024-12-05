@@ -41,7 +41,7 @@ interface ActivityRepository
     /**
      * Paginate all activity records.
      */
-    public function paginateActivities(int $perPage = 20, ?string $search = null): LengthAwarePaginator;
+    public function paginateActivities(int $perPage = 20, ?string $search = null, ?int $userId = null): LengthAwarePaginator;
 
     /**
      * Get count of user activities per day for given period of time.

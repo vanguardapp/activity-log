@@ -22,6 +22,7 @@ use Vanguard\Events\User\TwoFactorEnabledByAdmin;
 use Vanguard\Events\User\UpdatedByAdmin;
 use Vanguard\Events\User\UpdatedProfileDetails;
 use Vanguard\UserActivity\Logger;
+use Vanguard\UserActivity\Support\Enum\ActivityTypes;
 
 class UserEventsSubscriber
 {
@@ -31,139 +32,135 @@ class UserEventsSubscriber
 
     public function onLogin(LoggedIn $event): void
     {
-        $this->logger->log(trans('user-activity::log.logged_in'));
+        $this->logger->log(ActivityTypes::LOGGED_IN);
     }
 
     public function onLogout(LoggedOut $event): void
     {
-        $this->logger->log(trans('user-activity::log.logged_out'));
+        $this->logger->log(ActivityTypes::LOGGED_OUT);
     }
 
     public function onRegister(Registered $event): void
     {
         $this->logger->setUser($event->user);
-        $this->logger->log(trans('user-activity::log.created_account'));
+        $this->logger->log(ActivityTypes::CREATED_ACCOUNT);
     }
 
     public function onAvatarChange(ChangedAvatar $event): void
     {
-        $this->logger->log(trans('user-activity::log.updated_avatar'));
+        $this->logger->log(ActivityTypes::UPDATED_AVATAR);
     }
 
     public function onProfileDetailsUpdate(UpdatedProfileDetails $event): void
     {
-        $this->logger->log(trans('user-activity::log.updated_profile'));
+        $this->logger->log(ActivityTypes::UPDATED_PROFILE);
     }
 
     public function onDelete(Deleted $event): void
     {
-        $message = trans(
-            'user-activity::log.deleted_user',
-            ['name' => $event->getDeletedUser()->present()->nameOrEmail]
+        $this->logger->log(
+            ActivityTypes::DELETED_USER,
+            [
+                'name' => $event->getDeletedUser()->present()->nameOrEmail
+            ]
         );
-
-        $this->logger->log($message);
     }
 
     public function onBan(Banned $event): void
     {
-        $message = trans(
-            'user-activity::log.banned_user',
-            ['name' => $event->getBannedUser()->present()->nameOrEmail]
+        $this->logger->log(
+            ActivityTypes::BANNED_USER,
+            [
+                'name' => $event->getBannedUser()->present()->nameOrEmail
+            ]
         );
-
-        $this->logger->log($message);
     }
 
     public function onUpdateByAdmin(UpdatedByAdmin $event): void
     {
-        $message = trans(
-            'user-activity::log.updated_profile_details_for',
-            ['name' => $event->getUpdatedUser()->present()->nameOrEmail]
+        $this->logger->log(
+            ActivityTypes::UPDATED_PROFILE_DETAILS_FOR,
+            [
+                'name' => $event->getUpdatedUser()->present()->nameOrEmail
+            ]
         );
-
-        $this->logger->log($message);
     }
 
     public function onCreate(Created $event): void
     {
-        $message = trans(
-            'user-activity::log.created_account_for',
-            ['name' => $event->getCreatedUser()->present()->nameOrEmail]
+        $this->logger->log(
+            ActivityTypes::CREATED_ACCOUNT_FOR,
+            [
+                'name' => $event->getCreatedUser()->present()->nameOrEmail
+            ]
         );
-
-        $this->logger->log($message);
     }
 
     public function onSettingsUpdate(SettingsUpdated $event): void
     {
-        $this->logger->log(trans('user-activity::log.updated_settings'));
+        $this->logger->log(ActivityTypes::UPDATED_SETTINGS);
     }
 
     public function onTwoFactorEnable(TwoFactorEnabled $event): void
     {
-        $this->logger->log(trans('user-activity::log.enabled_2fa'));
+        $this->logger->log(ActivityTypes::ENABLED_2FA);
     }
 
     public function onTwoFactorDisable(TwoFactorDisabled $event): void
     {
-        $this->logger->log(trans('user-activity::log.disabled_2fa'));
+        $this->logger->log(ActivityTypes::DISABLED_2FA);
     }
 
     public function onTwoFactorEnableByAdmin(TwoFactorEnabledByAdmin $event): void
     {
-        $message = trans(
-            'user-activity::log.enabled_2fa_for',
-            ['name' => $event->getUser()->present()->nameOrEmail]
+        $this->logger->log(
+            ActivityTypes::ENABLED_2FA_FOR,
+            [
+                'name' => $event->getUser()->present()->nameOrEmail
+            ]
         );
-
-        $this->logger->log($message);
     }
 
     public function onTwoFactorDisableByAdmin(TwoFactorDisabledByAdmin $event): void
     {
-        $message = trans(
-            'user-activity::log.disabled_2fa_for',
-            ['name' => $event->getUser()->present()->nameOrEmail]
+        $this->logger->log(
+            ActivityTypes::DISABLED_2FA_FOR,
+            [
+                'name' => $event->getUser()->present()->nameOrEmail
+            ]
         );
-
-        $this->logger->log($message);
     }
 
     public function onPasswordResetEmailRequest(RequestedPasswordResetEmail $event): void
     {
         $this->logger->setUser($event->getUser());
-        $this->logger->log(trans('user-activity::log.requested_password_reset'));
+        $this->logger->log(ActivityTypes::REQUESTED_PASSWORD_RESET);
     }
 
     public function onPasswordReset(PasswordReset $event): void
     {
         $this->logger->setUser($event->user);
-        $this->logger->log(trans('user-activity::log.reseted_password'));
+        $this->logger->log(ActivityTypes::RESETED_PASSWORD);
     }
 
     public function onStartImpersonating(TakeImpersonation $event): void
     {
         $this->logger->setUser($event->impersonator);
 
-        $message = trans('user-activity::log.started_impersonating', [
+        $this->logger->log(ActivityTypes::STARTED_IMPERSONATING, [
             'id' => $event->impersonated->id,
             'name' => $event->impersonated->present()->name,
         ]);
-
-        $this->logger->log($message);
     }
 
     public function onStopImpersonating(LeaveImpersonation $event): void
     {
         $this->logger->setUser($event->impersonator);
 
-        $message = trans('user-activity::log.stopped_impersonating', [
+        $this->logger->log(ActivityTypes::STOPPED_IMPERSONATING, [
             'id' => $event->impersonated->id,
             'name' => $event->impersonated->present()->name,
         ]);
-
-        $this->logger->log($message);
     }
 
     /**

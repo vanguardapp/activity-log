@@ -21,27 +21,27 @@ class RoleEventsSubscriberTest extends ListenerTestCase
     public function onCreate()
     {
         event(new Created($this->role));
-        $this->assertMessageLogged("Created new role called {$this->role->display_name}.");
+        $this->assertMessageLogged('new_role', additional_data: ['name' => $this->role->display_name]);
     }
 
     /** @test */
     public function onUpdate()
     {
         event(new Updated($this->role));
-        $this->assertMessageLogged("Updated role with name {$this->role->display_name}.");
+        $this->assertMessageLogged('updated_role', additional_data: ['name' => $this->role->display_name]);
     }
 
     /** @test */
     public function onDelete()
     {
         event(new Deleted($this->role));
-        $this->assertMessageLogged("Deleted role named {$this->role->display_name}.");
+        $this->assertMessageLogged('deleted_role', additional_data: ['name' => $this->role->display_name]);
     }
 
     /** @test */
     public function onPermissionsUpdate()
     {
         event(new PermissionsUpdated());
-        $this->assertMessageLogged('Updated role permissions.');
+        $this->assertMessageLogged('updated_role_permissions');
     }
 }

@@ -18,35 +18,50 @@
     @endif
 @stop
 
+@section('styles')
+    <link rel="stylesheet" href="{{ url('vendor/plugins/activity-log/css/vendor.css') }}">
+    <link rel="stylesheet" href="{{ url('vendor/plugins/activity-log/css/activity-log.css') }}">
+@stop
+
 @section('content')
 
     <div class="card">
-    <div class="card-body">
-        <form action="" method="GET" id="users-form" class="border-bottom-light mb-3">
-            <div class="row justify-content-between mt-3 mb-4">
-                <div class="col-lg-5 col-md-6">
-                    <div class="input-group custom-search-form">
-                        <input type="text"
-                               class="form-control input-solid"
-                               name="search"
-                               value="{{ Request::get('search') }}"
-                               placeholder="@lang('Search for Action')">
+        <div class="card-body">
+            <form action="" method="GET" id="users-form" class="border-bottom-light mb-3">
+                <div class="row justify-content-between mt-3 mb-4">
+                    <div class="col-lg-5 col-md-6">
+                        <div class="input-group custom-search-form">
+                            <select class="form-control" name="search">
+                                <option value="">@lang('Search for Action')</option>
+                                @foreach (\Vanguard\UserActivity\Support\Enum\ActivityTypes::getConstants() as $key => $value)
+                                    <option value="{{ $value }}" {{ Request::get('search') == $value ? 'selected' : '' }}>
+                                        @lang($value, ['name' => '{' . __('Name') . '}' ])
+                                    </option>
+                                @endforeach
+                            </select>
+                            <select id="user-select" class="form-control user-select" name="userId"
+                                    data-url="{{ route('users.list') }}"
+                                    data-placeholder="@lang('Search for User')"
+                                    data-selected-id="{{ $selectedUser->id ?? '' }}"
+                                    data-selected-text="{{ ($selectedUser->first_name ?? '') . ' ' . ($selectedUser->last_name ?? '') }}">
+                                <option value="">@lang('Search for User')</option>
+                            </select>
 
-                        <span class="input-group-append">
+                            <span class="input-group-append">
                             @if (Request::has('search') && Request::get('search') != '')
-                                <a href="{{ isset($adminView) ? route('activity.index') : route('profile.activity') }}"
-                                   class="btn btn-light d-flex align-items-center"
-                                   role="button">
+                                    <a href="{{ isset($adminView) ? route('activity.index') : route('profile.activity') }}"
+                                       class="btn btn-light d-flex align-items-center"
+                                       role="button">
                                     <i class="fas fa-times text-muted"></i>
                                 </a>
-                            @endif
+                                @endif
                             <button class="btn btn-light" type="submit" id="search-activities-btn">
                                 <i class="fas fa-search text-muted"></i>
                             </button>
                         </span>
+                        </div>
                     </div>
                 </div>
-            </div>
         </form>
 
         <div class="table-responsive">
@@ -76,7 +91,7 @@
                                 </td>
                             @endif
                             <td>{{ $activity->ip_address }}</td>
-                            <td>{{ $activity->description }}</td>
+                            <td>{{ __($activity->description, $activity->additional_data ?? []) }}</td>
                             <td>{{ $activity->created_at->format(config('app.date_time_format')) }}</td>
                             <td class="text-center">
                                 <a tabindex="0" role="button" class="btn btn-icon"
@@ -93,8 +108,13 @@
                 </tbody>
             </table>
         </div>
+        </div>
     </div>
-</div>
 
-{!! $activities->render() !!}
+    {!! $activities->render() !!}
+@stop
+
+@section('scripts')
+    <script src="{{ url("vendor/plugins/activity-log/js/vendor.js") }}"></script>
+    <script src="{{ url("vendor/plugins/activity-log/js/activity-log.js") }}"></script>
 @stop
