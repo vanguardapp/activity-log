@@ -4,7 +4,7 @@ namespace Vanguard\UserActivity;
 
 use Illuminate\Contracts\Auth\Factory;
 use Illuminate\Http\Request;
-use Vanguard\User;
+use \App\Models\User;
 use Vanguard\UserActivity\Repositories\Activity\ActivityRepository;
 
 class Logger

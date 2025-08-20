@@ -4,8 +4,8 @@ namespace Vanguard\UserActivity\Http\Controllers\Web;
 
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
-use Vanguard\Http\Controllers\Controller;
-use Vanguard\User;
+use App\Http\Controllers\Controller;
+use \App\Models\User;
 use Vanguard\UserActivity\Repositories\Activity\ActivityRepository;
 
 class UserActivityController extends Controller

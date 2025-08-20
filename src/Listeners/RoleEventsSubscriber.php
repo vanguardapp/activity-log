@@ -3,10 +3,10 @@
 namespace Vanguard\UserActivity\Listeners;
 
 use Illuminate\Events\Dispatcher;
-use Vanguard\Events\Role\Created;
-use Vanguard\Events\Role\Deleted;
-use Vanguard\Events\Role\PermissionsUpdated;
-use Vanguard\Events\Role\Updated;
+use App\Events\Role\Created;
+use App\Events\Role\Deleted;
+use App\Events\Role\PermissionsUpdated;
+use App\Events\Role\Updated;
 use Vanguard\UserActivity\Logger;
 
 class RoleEventsSubscriber

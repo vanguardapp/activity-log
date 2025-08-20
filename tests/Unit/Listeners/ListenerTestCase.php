@@ -4,7 +4,7 @@ namespace Vanguard\UserActivity\Tests\Unit\Listeners;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
-use Vanguard\User;
+use \App\Models\User;
 
 abstract class ListenerTestCase extends TestCase
 {

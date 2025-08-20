@@ -2,21 +2,21 @@
 
 namespace Vanguard\UserActivity\Tests\Unit\Listeners;
 
-use Vanguard\Events\Permission\Created;
-use Vanguard\Events\Permission\Deleted;
-use Vanguard\Events\Permission\Updated;
+use App\Events\Permission\Created;
+use App\Events\Permission\Deleted;
+use App\Events\Permission\Updated;
 
 // Manually require the base test case to avoid issues while running automated tests
 require_once __DIR__.'/ListenerTestCase.php';
 
 class PermissionEventsSubscriberTest extends \Vanguard\UserActivity\Tests\Unit\Listeners\ListenerTestCase
 {
-    protected \Vanguard\Permission $perm;
+    protected \App\Models\Permission $perm;
 
     protected function setUp(): void
     {
         parent::setUp();
-        $this->perm = \Vanguard\Permission::factory()->create();
+        $this->perm = \App\Models\Permission::factory()->create();
     }
 
     protected function assertMessageLogged($msg, $user = null): void
@@ -29,22 +29,19 @@ class PermissionEventsSubscriberTest extends \Vanguard\UserActivity\Tests\Unit\L
         ]);
     }
 
-    /** @test */
-    public function onCreate()
+    public function test_onCreate()
     {
         event(new Created($this->perm));
         $this->assertMessageLogged("Created new permission called {$this->perm->display_name}.");
     }
 
-    /** @test */
-    public function onUpdate()
+    public function test_onUpdate()
     {
         event(new Updated($this->perm));
         $this->assertMessageLogged("Updated the permission named {$this->perm->display_name}.");
     }
 
-    /** @test */
-    public function onDelete()
+    public function test_onDelete()
     {
         event(new Deleted($this->perm));
         $this->assertMessageLogged("Deleted permission named {$this->perm->display_name}.");

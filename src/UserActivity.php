@@ -5,7 +5,7 @@ namespace Vanguard\UserActivity;
 use Event;
 use Route;
 use Vanguard\Plugins\Plugin;
-use Vanguard\Support\Sidebar\Item;
+use App\Support\Sidebar\Item;
 use Vanguard\UserActivity\Http\View\Composers\ShowUserComposer;
 use Vanguard\UserActivity\Listeners\PermissionEventsSubscriber;
 use Vanguard\UserActivity\Listeners\RoleEventsSubscriber;

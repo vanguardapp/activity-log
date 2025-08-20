@@ -3,9 +3,9 @@
 namespace Vanguard\UserActivity\Listeners;
 
 use Illuminate\Events\Dispatcher;
-use Vanguard\Events\Permission\Created;
-use Vanguard\Events\Permission\Deleted;
-use Vanguard\Events\Permission\Updated;
+use App\Events\Permission\Created;
+use App\Events\Permission\Deleted;
+use App\Events\Permission\Updated;
 use Vanguard\UserActivity\Logger;
 
 class PermissionEventsSubscriber

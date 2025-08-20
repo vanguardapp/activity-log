@@ -21,8 +21,7 @@ class ActivityTest extends TestCase
         $this->artisan('db:seed');
     }
 
-    /** @test */
-    public function display_all_activities()
+    public function test_display_all_activities()
     {
         $this->withoutMiddleware();
 
@@ -42,8 +41,7 @@ class ActivityTest extends TestCase
             ->assertSee('bar');
     }
 
-    /** @test */
-    public function display_activities_for_a_specific_user()
+    public function test_display_activities_for_a_specific_user()
     {
         $user = UserFactory::admin()->create();
         $this->be($user);
@@ -54,8 +52,7 @@ class ActivityTest extends TestCase
             ->assertSee('foo');
     }
 
-    /** @test */
-    public function search_activities()
+    public function test_search_activities()
     {
         $this->withoutMiddleware();
 

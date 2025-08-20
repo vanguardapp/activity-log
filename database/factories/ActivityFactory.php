@@ -3,7 +3,7 @@
 namespace Vanguard\UserActivity\Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Vanguard\User;
+use App\Models\User;
 use Vanguard\UserActivity\Activity;
 
 class ActivityFactory extends Factory

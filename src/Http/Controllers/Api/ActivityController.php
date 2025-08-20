@@ -4,7 +4,7 @@ namespace Vanguard\UserActivity\Http\Controllers\Api;
 
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
-use Vanguard\Http\Controllers\Api\ApiController;
+use App\Http\Controllers\Api\ApiController;
 use Vanguard\UserActivity\Activity;
 use Vanguard\UserActivity\Http\Requests\GetActivitiesRequest;
 use Vanguard\UserActivity\Http\Resources\ActivityResource;

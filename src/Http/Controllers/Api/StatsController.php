@@ -5,7 +5,7 @@ namespace Vanguard\UserActivity\Http\Controllers\Api;
 use Auth;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
-use Vanguard\Http\Controllers\Api\ApiController;
+use App\Http\Controllers\Api\ApiController;
 use Vanguard\UserActivity\Repositories\Activity\ActivityRepository;
 
 class StatsController extends ApiController

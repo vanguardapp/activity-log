@@ -5,8 +5,8 @@ namespace Vanguard\UserActivity\Widgets;
 use Auth;
 use Carbon\Carbon;
 use Illuminate\Contracts\View\View;
+use \App\Models\User;
 use Vanguard\Plugins\Widget;
-use Vanguard\User;
 use Vanguard\UserActivity\Repositories\Activity\ActivityRepository;
 
 class ActivityWidget extends Widget

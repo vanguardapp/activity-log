@@ -4,20 +4,18 @@ namespace Vanguard\UserActivity\Tests\Feature\Api;
 
 use Facades\Tests\Setup\UserFactory;
 use Tests\Feature\ApiTestCase;
-use Vanguard\User;
+use \App\Models\User;
 use Vanguard\UserActivity\Activity;
 use Vanguard\UserActivity\Http\Resources\ActivityResource;
 
 class ActivityTest extends ApiTestCase
 {
-    /** @test */
-    public function unauthenticated()
+    public function test_unauthenticated()
     {
         $this->getJson('/api/activity')->assertStatus(401);
     }
 
-    /** @test */
-    public function get_activities_without_permission()
+    public function test_get_activities_without_permission()
     {
         $user = User::factory()->create();
 
@@ -26,8 +24,7 @@ class ActivityTest extends ApiTestCase
             ->assertStatus(403);
     }
 
-    /** @test */
-    public function paginate_activities()
+    public function test_paginate_activities()
     {
         $user = $this->getUser();
         $user2 = User::factory()->create();
@@ -54,8 +51,7 @@ class ActivityTest extends ApiTestCase
         ]);
     }
 
-    /** @test */
-    public function paginate_activities_with_search_param()
+    public function test_paginate_activities_with_search_param()
     {
         $user = $this->getUser();
 
@@ -89,16 +85,14 @@ class ActivityTest extends ApiTestCase
         ]);
     }
 
-    /** @test */
-    public function paginate_activities_with_more_records_per_page_than_allowed()
+    public function test_paginate_activities_with_more_records_per_page_than_allowed()
     {
         $this->actingAs($this->getUser(), self::API_GUARD)
             ->getJson('/api/activity?per_page=140')
             ->assertStatus(422);
     }
 
-    /** @test */
-    public function paginate_activities_for_user()
+    public function test_paginate_activities_for_user()
     {
         $user = UserFactory::user()->withPermissions('users.activity')->create();
 

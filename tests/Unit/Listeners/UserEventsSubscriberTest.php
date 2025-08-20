@@ -8,61 +8,55 @@ class UserEventsSubscriberTest extends ListenerTestCase
 {
     use UpdatesSettings;
 
-    protected \Vanguard\User $theUser;
+    protected \App\Models\User $theUser;
 
     protected function setUp(): void
     {
         parent::setUp();
-        $this->theUser = \Vanguard\User::factory()->create();
+        $this->theUser = \App\Models\User::factory()->create();
     }
 
-    /** @test */
-    public function onLogin()
+    public function test_onLogin()
     {
-        event(new \Vanguard\Events\User\LoggedIn);
+        event(new \App\Events\User\LoggedIn);
         $this->assertMessageLogged('Logged in.');
     }
 
-    /** @test */
-    public function onLogout()
+    public function test_onLogout()
     {
-        event(new \Vanguard\Events\User\LoggedOut());
+        event(new \App\Events\User\LoggedOut());
         $this->assertMessageLogged('Logged out.');
     }
 
-    /** @test */
-    public function onRegister()
+    public function test_onRegister()
     {
         $this->setSettings([
             'reg_enabled' => true,
             'reg_email_confirmation' => true,
         ]);
 
-        $user = \Vanguard\User::factory()->create();
+        $user = \App\Models\User::factory()->create();
 
         event(new \Illuminate\Auth\Events\Registered($user));
 
         $this->assertMessageLogged('Created an account.', $user);
     }
 
-    /** @test */
-    public function onAvatarChange()
+    public function test_onAvatarChange()
     {
-        event(new \Vanguard\Events\User\ChangedAvatar);
+        event(new \App\Events\User\ChangedAvatar);
         $this->assertMessageLogged('Updated profile avatar.');
     }
 
-    /** @test */
-    public function onProfileDetailsUpdate()
+    public function test_onProfileDetailsUpdate()
     {
-        event(new \Vanguard\Events\User\UpdatedProfileDetails);
+        event(new \App\Events\User\UpdatedProfileDetails);
         $this->assertMessageLogged('Updated profile details.');
     }
 
-    /** @test */
-    public function onDelete()
+    public function test_onDelete()
     {
-        event(new \Vanguard\Events\User\Deleted($this->theUser));
+        event(new \App\Events\User\Deleted($this->theUser));
 
         $message = sprintf(
             'Deleted user %s.',
@@ -72,10 +66,9 @@ class UserEventsSubscriberTest extends ListenerTestCase
         $this->assertMessageLogged($message);
     }
 
-    /** @test */
-    public function onBan()
+    public function test_onBan()
     {
-        event(new \Vanguard\Events\User\Banned($this->theUser));
+        event(new \App\Events\User\Banned($this->theUser));
 
         $message = sprintf(
             'Banned user %s.',
@@ -85,10 +78,9 @@ class UserEventsSubscriberTest extends ListenerTestCase
         $this->assertMessageLogged($message);
     }
 
-    /** @test */
-    public function onUpdateByAdmin()
+    public function test_onUpdateByAdmin()
     {
-        event(new \Vanguard\Events\User\UpdatedByAdmin($this->theUser));
+        event(new \App\Events\User\UpdatedByAdmin($this->theUser));
 
         $message = sprintf(
             'Updated profile details for %s.',
@@ -98,10 +90,9 @@ class UserEventsSubscriberTest extends ListenerTestCase
         $this->assertMessageLogged($message);
     }
 
-    /** @test */
-    public function onCreate()
+    public function test_onCreate()
     {
-        event(new \Vanguard\Events\User\Created($this->theUser));
+        event(new \App\Events\User\Created($this->theUser));
 
         $message = sprintf(
             'Created an account for user %s.',
@@ -111,31 +102,27 @@ class UserEventsSubscriberTest extends ListenerTestCase
         $this->assertMessageLogged($message);
     }
 
-    /** @test */
-    public function onSettingsUpdate()
+    public function test_onSettingsUpdate()
     {
-        event(new \Vanguard\Events\Settings\Updated);
+        event(new \App\Events\Settings\Updated);
         $this->assertMessageLogged('Updated website settings.');
     }
 
-    /** @test */
-    public function onTwoFactorEnable()
+    public function test_onTwoFactorEnable()
     {
-        event(new \Vanguard\Events\User\TwoFactorEnabled);
+        event(new \App\Events\User\TwoFactorEnabled);
         $this->assertMessageLogged('Enabled Two-Factor Authentication.');
     }
 
-    /** @test */
-    public function onTwoFactorDisable()
+    public function test_onTwoFactorDisable()
     {
-        event(new \Vanguard\Events\User\TwoFactorDisabled);
+        event(new \App\Events\User\TwoFactorDisabled);
         $this->assertMessageLogged('Disabled Two-Factor Authentication.');
     }
 
-    /** @test */
-    public function onTwoFactorEnabledByAdmin()
+    public function test_onTwoFactorEnabledByAdmin()
     {
-        event(new \Vanguard\Events\User\TwoFactorEnabledByAdmin($this->theUser));
+        event(new \App\Events\User\TwoFactorEnabledByAdmin($this->theUser));
 
         $message = sprintf(
             'Enabled Two-Factor Authentication for user %s.',
@@ -145,10 +132,9 @@ class UserEventsSubscriberTest extends ListenerTestCase
         $this->assertMessageLogged($message);
     }
 
-    /** @test */
-    public function onTwoFactorDisabledByAdmin()
+    public function test_onTwoFactorDisabledByAdmin()
     {
-        event(new \Vanguard\Events\User\TwoFactorDisabledByAdmin($this->theUser));
+        event(new \App\Events\User\TwoFactorDisabledByAdmin($this->theUser));
 
         $message = sprintf(
             'Disabled Two-Factor Authentication for user %s.',
@@ -158,24 +144,21 @@ class UserEventsSubscriberTest extends ListenerTestCase
         $this->assertMessageLogged($message);
     }
 
-    /** @test */
-    public function onPasswordResetEmailRequest()
+    public function test_onPasswordResetEmailRequest()
     {
-        event(new \Vanguard\Events\User\RequestedPasswordResetEmail($this->user));
+        event(new \App\Events\User\RequestedPasswordResetEmail($this->user));
         $this->assertMessageLogged('Requested password reset email.');
     }
 
-    /** @test */
-    public function onPasswordReset()
+    public function test_onPasswordReset()
     {
         event(new \Illuminate\Auth\Events\PasswordReset($this->user));
         $this->assertMessageLogged('Reseted password using "Forgot Password" option.');
     }
 
-    /** @test */
-    public function onStartImpersonating()
+    public function test_onStartImpersonating()
     {
-        $impersonated = \Vanguard\User::factory()->create([
+        $impersonated = \App\Models\User::factory()->create([
             'first_name' => 'John',
             'last_name' => 'Doe',
         ]);
@@ -185,10 +168,9 @@ class UserEventsSubscriberTest extends ListenerTestCase
         $this->assertMessageLogged("Started impersonating user John Doe (ID: {$impersonated->id})");
     }
 
-    /** @test */
-    public function onStopImpersonating()
+    public function test_onStopImpersonating()
     {
-        $impersonated = \Vanguard\User::factory()->create([
+        $impersonated = \App\Models\User::factory()->create([
             'first_name' => 'John',
             'last_name' => 'Doe',
         ]);

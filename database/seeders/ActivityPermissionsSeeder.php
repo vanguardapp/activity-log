@@ -3,8 +3,8 @@
 namespace Vanguard\UserActivity\Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use Vanguard\Permission;
-use Vanguard\Role;
+use App\Models\Permission;
+use App\Models\Role;
 
 class ActivityPermissionsSeeder extends Seeder
 {

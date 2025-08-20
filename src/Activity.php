@@ -4,7 +4,7 @@ namespace Vanguard\UserActivity;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Vanguard\User;
+use \App\Models\User;
 use Vanguard\UserActivity\Database\Factories\ActivityFactory;
 
 class Activity extends Model

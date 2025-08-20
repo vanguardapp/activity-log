@@ -2,7 +2,7 @@
 
 namespace Vanguard\UserActivity\Http\Requests;
 
-use Vanguard\Http\Requests\Request;
+use App\Http\Requests\Request;
 
 class GetActivitiesRequest extends Request
 {

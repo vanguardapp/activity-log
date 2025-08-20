@@ -6,7 +6,7 @@ use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Testing\Assert;
 use Tests\TestCase;
-use Vanguard\User;
+use \App\Models\User;
 use Vanguard\UserActivity\Activity;
 use Vanguard\UserActivity\Repositories\Activity\EloquentActivity;
 
@@ -25,8 +25,7 @@ class EloquentActivityTest extends TestCase
         $this->repo = app(EloquentActivity::class);
     }
 
-    /** @test */
-    public function log()
+    public function test_log()
     {
         $user = User::factory()->create();
 
@@ -44,8 +43,7 @@ class EloquentActivityTest extends TestCase
         $this->assertDatabaseHas('user_activity', $data);
     }
 
-    /** @test */
-    public function paginate_activities_for_user()
+    public function test_paginate_activities_for_user()
     {
         $user = User::factory()->create();
 
@@ -59,8 +57,7 @@ class EloquentActivityTest extends TestCase
         $this->assertEquals($activities[5]->toArray(), $result['data'][5]);
     }
 
-    /** @test */
-    public function latest_activities_for_user()
+    public function test_latest_activities_for_user()
     {
         $user = User::factory()->create();
 
@@ -77,8 +74,7 @@ class EloquentActivityTest extends TestCase
         $this->assertEquals($activities1[0]->toArray(), $result[5]);
     }
 
-    /** @test */
-    public function paginate_activities()
+    public function test_paginate_activities()
     {
         $activities = Activity::factory()->times(10)->create();
 
@@ -91,8 +87,7 @@ class EloquentActivityTest extends TestCase
         Assert::assertArraySubset($activities[5]->toArray(), $result['data'][5]);
     }
 
-    /** @test */
-    public function userActivityForPeriod()
+    public function test_userActivityForPeriod()
     {
         $user = User::factory()->create();
         $now = Carbon::now();

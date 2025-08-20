@@ -4,14 +4,13 @@ namespace Vanguard\UserActivity\Tests\Feature\Api;
 
 use Carbon\Carbon;
 use Tests\Feature\ApiTestCase;
-use Vanguard\User;
+use \App\Models\User;
 use Vanguard\UserActivity\Activity;
 use Vanguard\UserActivity\Repositories\Activity\ActivityRepository;
 
 class StatsTest extends ApiTestCase
 {
-    /** @test */
-    public function non_admin_users_cannot_get_user_stats()
+    public function test_non_admin_users_cannot_get_user_stats()
     {
         $user = User::factory()->create();
 

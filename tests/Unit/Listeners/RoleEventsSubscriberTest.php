@@ -2,44 +2,40 @@
 
 namespace Vanguard\UserActivity\Tests\Unit\Listeners;
 
-use Vanguard\Events\Role\Created;
-use Vanguard\Events\Role\Deleted;
-use Vanguard\Events\Role\PermissionsUpdated;
-use Vanguard\Events\Role\Updated;
+use App\Events\Role\Created;
+use App\Events\Role\Deleted;
+use App\Events\Role\PermissionsUpdated;
+use App\Events\Role\Updated;
 
 class RoleEventsSubscriberTest extends ListenerTestCase
 {
-    protected \Vanguard\Role $role;
+    protected \App\Models\Role $role;
 
     protected function setUp(): void
     {
         parent::setUp();
-        $this->role = \Vanguard\Role::factory()->create();
+        $this->role = \App\Models\Role::factory()->create();
     }
 
-    /** @test */
-    public function onCreate()
+    public function test_onCreate()
     {
         event(new Created($this->role));
         $this->assertMessageLogged("Created new role called {$this->role->display_name}.");
     }
 
-    /** @test */
-    public function onUpdate()
+    public function test_onUpdate()
     {
         event(new Updated($this->role));
         $this->assertMessageLogged("Updated role with name {$this->role->display_name}.");
     }
 
-    /** @test */
-    public function onDelete()
+    public function test_onDelete()
     {
         event(new Deleted($this->role));
         $this->assertMessageLogged("Deleted role named {$this->role->display_name}.");
     }
 
-    /** @test */
-    public function onPermissionsUpdate()
+    public function test_onPermissionsUpdate()
     {
         event(new PermissionsUpdated());
         $this->assertMessageLogged('Updated role permissions.');
