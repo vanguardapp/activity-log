@@ -69,7 +69,7 @@
                                         {{ $activity->user->present()->nameOrEmail }}
                                     @else
                                         <a href="{{ route('activity.user', $activity->user_id) }}"
-                                           data-toggle="tooltip" title="@lang('View Activity Log')">
+                                           data-bs-toggle="tooltip" title="@lang('View Activity Log')">
                                             {{ $activity->user->present()->nameOrEmail }}
                                         </a>
                                     @endif
@@ -80,11 +80,11 @@
                             <td>{{ $activity->created_at->format(config('app.date_time_format')) }}</td>
                             <td class="text-center">
                                 <a tabindex="0" role="button" class="btn btn-icon"
-                                   data-trigger="focus"
-                                   data-placement="left"
-                                   data-toggle="popover"
+                                   data-bs-trigger="focus"
+                                   data-bs-placement="left"
+                                   data-bs-toggle="popover"
                                    title="@lang('User Agent')"
-                                   data-content="{{ $activity->user_agent }}">
+                                   data-bs-content="{{ $activity->user_agent }}">
                                     <i class="fas fa-info-circle"></i>
                                 </a>
                             </td>

@@ -6,8 +6,8 @@
             <small>
                 <a href="{{ route('activity.user', $user->id) }}"
                    class="edit"
-                   data-toggle="tooltip"
-                   data-placement="top"
+                   data-bs-toggle="tooltip"
+                   data-bs-placement="top"
                    title="@lang('Complete Activity Log')">
                     @lang('View All')
                 </a>
