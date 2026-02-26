@@ -18,7 +18,7 @@
     ],
     "require": {
         "php": "^8.2",
-        "illuminate/http": "^12.0",
+        "illuminate/http": "^12.0|^13.0",
         "vanguardapp/plugins": "v7.0|v8.0",
         "spatie/laravel-query-builder": "^6.3"
     },
