@@ -2,10 +2,9 @@
 
 namespace Vanguard\UserActivity\Widgets;
 
+use App\Models\User;
 use Auth;
 use Carbon\Carbon;
-use Illuminate\Contracts\View\View;
-use \App\Models\User;
 use Vanguard\Plugins\Widget;
 use Vanguard\UserActivity\Repositories\Activity\ActivityRepository;
 
@@ -25,18 +24,31 @@ class ActivityWidget extends Widget
         });
     }
 
-    public function render(): View
+    /**
+     * {@inheritdoc}
+     */
+    public function component(): string
     {
-        return view('user-activity::widgets.user-activity', [
-            'activities' => $this->getActivity(),
-        ]);
+        return 'user-activity::ActivityWidget';
     }
 
-    public function scripts(): View
+    /**
+     * {@inheritdoc}
+     */
+    public function data(): array
     {
-        return view('user-activity::widgets.user-activity-scripts', [
-            'activities' => $this->getActivity(),
-        ]);
+        $activity = $this->getActivity();
+
+        return [
+            'title' => __('User Activity'),
+            'labels' => array_keys($activity),
+            'values' => array_values($activity),
+            // Kept as separate keys so the existing de/sr translations apply.
+            'units' => [
+                'action' => __('action'),
+                'actions' => __('actions'),
+            ],
+        ];
     }
 
     private function getActivity(): array

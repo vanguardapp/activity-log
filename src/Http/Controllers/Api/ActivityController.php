@@ -2,9 +2,10 @@
 
 namespace Vanguard\UserActivity\Http\Controllers\Api;
 
+use App\Http\Controllers\Api\ApiController;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
-use App\Http\Controllers\Api\ApiController;
 use Vanguard\UserActivity\Activity;
 use Vanguard\UserActivity\Http\Requests\GetActivitiesRequest;
 use Vanguard\UserActivity\Http\Resources\ActivityResource;
@@ -20,7 +21,7 @@ class ActivityController extends ApiController
     /**
      * Paginate user activities.
      */
-    public function index(GetActivitiesRequest $request): \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+    public function index(GetActivitiesRequest $request): AnonymousResourceCollection
     {
         $activities = QueryBuilder::for(Activity::class)
             ->allowedIncludes('user')

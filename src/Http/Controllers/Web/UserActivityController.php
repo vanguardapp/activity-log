@@ -2,17 +2,15 @@
 
 namespace Vanguard\UserActivity\Http\Controllers\Web;
 
+use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use \App\Models\User;
 use Vanguard\UserActivity\Repositories\Activity\ActivityRepository;
 
 class UserActivityController extends Controller
 {
-    public function __construct(private readonly ActivityRepository $activities)
-    {
-    }
+    public function __construct(private readonly ActivityRepository $activities) {}
 
     /**
      * Displays the activity log page for specific user.

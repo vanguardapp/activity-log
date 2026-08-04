@@ -2,18 +2,16 @@
 
 namespace Vanguard\UserActivity\Listeners;
 
-use Illuminate\Events\Dispatcher;
 use App\Events\Role\Created;
 use App\Events\Role\Deleted;
 use App\Events\Role\PermissionsUpdated;
 use App\Events\Role\Updated;
+use Illuminate\Events\Dispatcher;
 use Vanguard\UserActivity\Logger;
 
 class RoleEventsSubscriber
 {
-    public function __construct(private readonly Logger $logger)
-    {
-    }
+    public function __construct(private readonly Logger $logger) {}
 
     public function onCreate(Created $event): void
     {

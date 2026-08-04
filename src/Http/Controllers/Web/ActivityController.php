@@ -2,16 +2,14 @@
 
 namespace Vanguard\UserActivity\Http\Controllers\Web;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
-use App\Http\Controllers\Controller;
 use Vanguard\UserActivity\Repositories\Activity\ActivityRepository;
 
 class ActivityController extends Controller
 {
-    public function __construct(private readonly ActivityRepository $activities)
-    {
-    }
+    public function __construct(private readonly ActivityRepository $activities) {}
 
     /**
      * Displays the page with activities for all system users.

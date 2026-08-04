@@ -2,17 +2,18 @@
 
 namespace Vanguard\UserActivity;
 
+use App\Support\Sidebar\Item;
 use Event;
+use Illuminate\Contracts\Container\BindingResolutionException;
 use Route;
 use Vanguard\Plugins\Plugin;
-use App\Support\Sidebar\Item;
-use Vanguard\UserActivity\Http\View\Composers\ShowUserComposer;
+use Vanguard\Plugins\Vanguard;
 use Vanguard\UserActivity\Listeners\PermissionEventsSubscriber;
 use Vanguard\UserActivity\Listeners\RoleEventsSubscriber;
 use Vanguard\UserActivity\Listeners\UserEventsSubscriber;
 use Vanguard\UserActivity\Repositories\Activity\ActivityRepository;
 use Vanguard\UserActivity\Repositories\Activity\EloquentActivity;
-use View;
+use Vanguard\UserActivity\Slots\RecentActivitySlot;
 
 class UserActivity extends Plugin
 {
@@ -40,17 +41,18 @@ class UserActivity extends Plugin
      * Bootstrap services.
      *
      *
-     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     * @throws BindingResolutionException
      */
     public function boot(): void
     {
-        $this->loadViewsFrom(__DIR__.'/../resources/views', 'user-activity');
         $this->loadTranslationsFrom(__DIR__.'/../resources/lang', 'user-activity');
         $this->loadJsonTranslationsFrom(__DIR__.'/../resources/lang');
 
         $this->publishes([
             __DIR__.'/../database/migrations' => database_path('migrations'),
         ], 'migrations');
+
+        $this->publishAssets();
 
         $this->app->booted(function () {
             $this->mapWebRoutes();
@@ -60,9 +62,29 @@ class UserActivity extends Plugin
             }
         });
 
-        $this->attachViewComposers();
+        $this->registerSlots();
 
         $this->registerEventListeners();
+    }
+
+    /**
+     * The compiled plugin bundle published to public/vendor/plugins/user-activity.
+     *
+     * {@inheritdoc}
+     */
+    public function assets(): array
+    {
+        return $this->viteAssets('user-activity');
+    }
+
+    /**
+     * Publish the compiled plugin bundle.
+     */
+    protected function publishAssets(): void
+    {
+        $this->publishes([
+            __DIR__.'/../dist' => public_path('vendor/plugins/user-activity'),
+        ], 'public');
     }
 
     /**
@@ -103,10 +125,10 @@ class UserActivity extends Plugin
     }
 
     /**
-     * Attach view composers to add necessary data to the view.
+     * Register the UI slots this plugin contributes to the host.
      */
-    private function attachViewComposers(): void
+    private function registerSlots(): void
     {
-        View::composer('user.view', ShowUserComposer::class);
+        Vanguard::slot('user:show', RecentActivitySlot::class);
     }
 }
