@@ -112,6 +112,26 @@ protected function widgets()
 }
 ```
 
+## Tests
+
+The suite runs against a Vanguard application, because this plugin is written
+for Vanguard rather than for Laravel in general: its listeners subscribe to
+`App\Events\*` and its controllers extend the host's base controller.
+
+Keep a Vanguard checkout beside this repository, with the plugin installed into
+it, then:
+
+```bash
+vendor/bin/phpunit
+```
+
+If the checkout lives elsewhere, point `VANGUARD_PATH` at it:
+
+```bash
+VANGUARD_PATH=/path/to/vanguard vendor/bin/phpunit
+```
+
+
 ## License
 
 This plugin is an open-source software licensed under the [MIT license](https://opensource.org/licenses/MIT). 
