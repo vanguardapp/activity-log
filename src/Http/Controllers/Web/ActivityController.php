@@ -4,8 +4,10 @@ namespace Vanguard\UserActivity\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\View\View;
+use Inertia\Inertia;
+use Inertia\Response as InertiaResponse;
 use Vanguard\UserActivity\Repositories\Activity\ActivityRepository;
+use Vanguard\UserActivity\Support\ActivityPayload;
 
 class ActivityController extends Controller
 {
@@ -14,13 +16,15 @@ class ActivityController extends Controller
     /**
      * Displays the page with activities for all system users.
      */
-    public function index(Request $request): View
+    public function index(Request $request): InertiaResponse
     {
         $activities = $this->activities->paginateActivities(perPage: 20, search: $request->search);
 
-        return view('user-activity::index', [
+        return Inertia::render('user-activity::Index', [
+            'activities' => ActivityPayload::paginator($activities, linkToUser: true),
             'adminView' => true,
-            'activities' => $activities,
+            'user' => null,
+            'filters' => ['search' => (string) $request->search],
         ]);
     }
 }

@@ -1,0 +1,17 @@
+@import 'tailwindcss/theme.css' theme(reference);
+@import 'tailwindcss/utilities.css' layer(utilities);
+
+@source '../js/**/*.{vue,ts}';
+
+/*
+ * The host emits the real custom properties from its own @theme block. These
+ * are declared as references only, so Tailwind knows how to generate
+ * `text-primary-600` here without shipping a duplicate copy of the variables.
+ */
+@theme {
+    --color-primary-50: #edfcf8;
+    --color-primary-100: #d3f8ed;
+    --color-primary-600: #179970;
+    --color-primary-700: #127c5b;
+    --color-body: #f5f8fa;
+}
