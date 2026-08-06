@@ -1,34 +1,30 @@
 <?php
 
-namespace Vanguard\UserActivity\Tests\Feature\Api;
-
+use App\Models\User;
 use Carbon\Carbon;
 use Tests\Feature\ApiTestCase;
-use \App\Models\User;
 use Vanguard\UserActivity\Activity;
 use Vanguard\UserActivity\Repositories\Activity\ActivityRepository;
 
-class StatsTest extends ApiTestCase
-{
-    public function test_non_admin_users_cannot_get_user_stats()
-    {
-        $user = User::factory()->create();
+uses(ApiTestCase::class);
 
-        Carbon::setTestNow(Carbon::now()->subWeek());
-        Activity::factory()->times(5)->create(['user_id' => $user->id]);
+test('non admin users cannot get user stats', function () {
+    $user = User::factory()->create();
 
-        Carbon::setTestNow(null);
-        Activity::factory()->times(5)->create(['user_id' => $user->id]);
+    Carbon::setTestNow(Carbon::now()->subWeek());
+    Activity::factory()->times(5)->create(['user_id' => $user->id]);
 
-        $response = $this->actingAs($user, self::API_GUARD)->getJson('/api/stats/activity');
+    Carbon::setTestNow(null);
+    Activity::factory()->times(5)->create(['user_id' => $user->id]);
 
-        $expected = app(ActivityRepository::class)->userActivityForPeriod(
-            $user->id,
-            Carbon::now()->subWeek(2),
-            Carbon::now()
-        )->toArray();
+    $response = $this->actingAs($user, self::API_GUARD)->getJson('/api/stats/activity');
 
-        $response->assertOk()
-            ->assertJson($expected);
-    }
-}
+    $expected = app(ActivityRepository::class)->userActivityForPeriod(
+        $user->id,
+        Carbon::now()->subWeek(2),
+        Carbon::now()
+    )->toArray();
+
+    $response->assertOk()
+        ->assertJson($expected);
+});
