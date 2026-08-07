@@ -122,14 +122,19 @@ Keep a Vanguard checkout beside this repository, with the plugin installed into
 it, then:
 
 ```bash
-vendor/bin/phpunit
+vendor/bin/pest
 ```
 
 If the checkout lives elsewhere, point `VANGUARD_PATH` at it:
 
 ```bash
-VANGUARD_PATH=/path/to/vanguard vendor/bin/phpunit
+VANGUARD_PATH=/path/to/vanguard vendor/bin/pest
 ```
+
+The tests are Pest tests, and each file names its base class with `uses()`
+rather than relying on a `tests/Pest.php`. Pest resolves that file from the
+root it is run from, which is the host application whenever this suite runs
+through the host's binary, so a `Pest.php` here would never be loaded.
 
 
 ## License
