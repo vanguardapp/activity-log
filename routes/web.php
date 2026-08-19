@@ -3,7 +3,7 @@
 use Vanguard\UserActivity\Http\Controllers\Web\ActivityController;
 use Vanguard\UserActivity\Http\Controllers\Web\UserActivityController;
 
-Route::group(['middleware' => ['auth', 'verified']], function () {
+Route::group(['middleware' => ['auth', 'verified', 'password-change']], function () {
 
     Route::get('profile/activity', [UserActivityController::class, 'show'])->name('profile.activity');
 

@@ -2,6 +2,7 @@
 
 namespace Vanguard\UserActivity\Http\Resources;
 
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class ActivityResource extends JsonResource
@@ -9,7 +10,7 @@ class ActivityResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  Request  $request
      */
     public function toArray($request): array
     {

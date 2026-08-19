@@ -2,9 +2,9 @@
 
 namespace Vanguard\UserActivity;
 
+use App\Models\User;
 use Illuminate\Contracts\Auth\Factory;
 use Illuminate\Http\Request;
-use \App\Models\User;
 use Vanguard\UserActivity\Repositories\Activity\ActivityRepository;
 
 class Logger
@@ -15,8 +15,7 @@ class Logger
         private readonly Request $request,
         private readonly Factory $auth,
         private readonly ActivityRepository $activities
-    ) {
-    }
+    ) {}
 
     /**
      * Log user action.

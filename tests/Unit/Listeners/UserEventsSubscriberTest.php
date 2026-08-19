@@ -1,182 +1,176 @@
 <?php
 
-namespace Vanguard\UserActivity\Tests\Unit\Listeners;
-
+use App\Events\Settings\Updated;
+use App\Events\User\Banned;
+use App\Events\User\ChangedAvatar;
+use App\Events\User\Created;
+use App\Events\User\Deleted;
+use App\Events\User\LoggedIn;
+use App\Events\User\LoggedOut;
+use App\Events\User\RequestedPasswordResetEmail;
+use App\Events\User\TwoFactorDisabled;
+use App\Events\User\TwoFactorDisabledByAdmin;
+use App\Events\User\TwoFactorEnabled;
+use App\Events\User\TwoFactorEnabledByAdmin;
+use App\Events\User\UpdatedByAdmin;
+use App\Events\User\UpdatedProfileDetails;
+use App\Models\User;
+use Illuminate\Auth\Events\PasswordReset;
+use Illuminate\Auth\Events\Registered;
+use Lab404\Impersonate\Events\LeaveImpersonation;
+use Lab404\Impersonate\Events\TakeImpersonation;
 use Tests\UpdatesSettings;
+use Vanguard\UserActivity\Tests\Unit\Listeners\ListenerTestCase;
 
-class UserEventsSubscriberTest extends ListenerTestCase
-{
-    use UpdatesSettings;
+uses(ListenerTestCase::class);
+uses(UpdatesSettings::class);
 
-    protected \App\Models\User $theUser;
+beforeEach(function () {
+    $this->theUser = User::factory()->create();
+});
 
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $this->theUser = \App\Models\User::factory()->create();
-    }
+test('on login', function () {
+    event(new LoggedIn);
+    $this->assertMessageLogged('Logged in.');
+});
 
-    public function test_onLogin()
-    {
-        event(new \App\Events\User\LoggedIn);
-        $this->assertMessageLogged('Logged in.');
-    }
+test('on logout', function () {
+    event(new LoggedOut);
+    $this->assertMessageLogged('Logged out.');
+});
 
-    public function test_onLogout()
-    {
-        event(new \App\Events\User\LoggedOut());
-        $this->assertMessageLogged('Logged out.');
-    }
+test('on register', function () {
+    $this->setSettings([
+        'reg_enabled' => true,
+        'reg_email_confirmation' => true,
+    ]);
 
-    public function test_onRegister()
-    {
-        $this->setSettings([
-            'reg_enabled' => true,
-            'reg_email_confirmation' => true,
-        ]);
+    $user = User::factory()->create();
 
-        $user = \App\Models\User::factory()->create();
+    event(new Registered($user));
 
-        event(new \Illuminate\Auth\Events\Registered($user));
+    $this->assertMessageLogged('Created an account.', $user);
+});
 
-        $this->assertMessageLogged('Created an account.', $user);
-    }
+test('on avatar change', function () {
+    event(new ChangedAvatar);
+    $this->assertMessageLogged('Updated profile avatar.');
+});
 
-    public function test_onAvatarChange()
-    {
-        event(new \App\Events\User\ChangedAvatar);
-        $this->assertMessageLogged('Updated profile avatar.');
-    }
+test('on profile details update', function () {
+    event(new UpdatedProfileDetails);
+    $this->assertMessageLogged('Updated profile details.');
+});
 
-    public function test_onProfileDetailsUpdate()
-    {
-        event(new \App\Events\User\UpdatedProfileDetails);
-        $this->assertMessageLogged('Updated profile details.');
-    }
+test('on delete', function () {
+    event(new Deleted($this->theUser));
 
-    public function test_onDelete()
-    {
-        event(new \App\Events\User\Deleted($this->theUser));
+    $message = sprintf(
+        'Deleted user %s.',
+        $this->theUser->present()->nameOrEmail
+    );
 
-        $message = sprintf(
-            'Deleted user %s.',
-            $this->theUser->present()->nameOrEmail
-        );
+    $this->assertMessageLogged($message);
+});
 
-        $this->assertMessageLogged($message);
-    }
+test('on ban', function () {
+    event(new Banned($this->theUser));
 
-    public function test_onBan()
-    {
-        event(new \App\Events\User\Banned($this->theUser));
+    $message = sprintf(
+        'Banned user %s.',
+        $this->theUser->present()->nameOrEmail
+    );
 
-        $message = sprintf(
-            'Banned user %s.',
-            $this->theUser->present()->nameOrEmail
-        );
+    $this->assertMessageLogged($message);
+});
 
-        $this->assertMessageLogged($message);
-    }
+test('on update by admin', function () {
+    event(new UpdatedByAdmin($this->theUser));
 
-    public function test_onUpdateByAdmin()
-    {
-        event(new \App\Events\User\UpdatedByAdmin($this->theUser));
+    $message = sprintf(
+        'Updated profile details for %s.',
+        $this->theUser->present()->nameOrEmail
+    );
 
-        $message = sprintf(
-            'Updated profile details for %s.',
-            $this->theUser->present()->nameOrEmail
-        );
+    $this->assertMessageLogged($message);
+});
 
-        $this->assertMessageLogged($message);
-    }
+test('on create', function () {
+    event(new Created($this->theUser));
 
-    public function test_onCreate()
-    {
-        event(new \App\Events\User\Created($this->theUser));
+    $message = sprintf(
+        'Created an account for user %s.',
+        $this->theUser->present()->nameOrEmail
+    );
 
-        $message = sprintf(
-            'Created an account for user %s.',
-            $this->theUser->present()->nameOrEmail
-        );
+    $this->assertMessageLogged($message);
+});
 
-        $this->assertMessageLogged($message);
-    }
+test('on settings update', function () {
+    event(new Updated);
+    $this->assertMessageLogged('Updated website settings.');
+});
 
-    public function test_onSettingsUpdate()
-    {
-        event(new \App\Events\Settings\Updated);
-        $this->assertMessageLogged('Updated website settings.');
-    }
+test('on two factor enable', function () {
+    event(new TwoFactorEnabled);
+    $this->assertMessageLogged('Enabled Two-Factor Authentication.');
+});
 
-    public function test_onTwoFactorEnable()
-    {
-        event(new \App\Events\User\TwoFactorEnabled);
-        $this->assertMessageLogged('Enabled Two-Factor Authentication.');
-    }
+test('on two factor disable', function () {
+    event(new TwoFactorDisabled);
+    $this->assertMessageLogged('Disabled Two-Factor Authentication.');
+});
 
-    public function test_onTwoFactorDisable()
-    {
-        event(new \App\Events\User\TwoFactorDisabled);
-        $this->assertMessageLogged('Disabled Two-Factor Authentication.');
-    }
+test('on two factor enabled by admin', function () {
+    event(new TwoFactorEnabledByAdmin($this->theUser));
 
-    public function test_onTwoFactorEnabledByAdmin()
-    {
-        event(new \App\Events\User\TwoFactorEnabledByAdmin($this->theUser));
+    $message = sprintf(
+        'Enabled Two-Factor Authentication for user %s.',
+        $this->theUser->present()->nameOrEmail
+    );
 
-        $message = sprintf(
-            'Enabled Two-Factor Authentication for user %s.',
-            $this->theUser->present()->nameOrEmail
-        );
+    $this->assertMessageLogged($message);
+});
 
-        $this->assertMessageLogged($message);
-    }
+test('on two factor disabled by admin', function () {
+    event(new TwoFactorDisabledByAdmin($this->theUser));
 
-    public function test_onTwoFactorDisabledByAdmin()
-    {
-        event(new \App\Events\User\TwoFactorDisabledByAdmin($this->theUser));
+    $message = sprintf(
+        'Disabled Two-Factor Authentication for user %s.',
+        $this->theUser->present()->nameOrEmail
+    );
 
-        $message = sprintf(
-            'Disabled Two-Factor Authentication for user %s.',
-            $this->theUser->present()->nameOrEmail
-        );
+    $this->assertMessageLogged($message);
+});
 
-        $this->assertMessageLogged($message);
-    }
+test('on password reset email request', function () {
+    event(new RequestedPasswordResetEmail($this->user));
+    $this->assertMessageLogged('Requested password reset email.');
+});
 
-    public function test_onPasswordResetEmailRequest()
-    {
-        event(new \App\Events\User\RequestedPasswordResetEmail($this->user));
-        $this->assertMessageLogged('Requested password reset email.');
-    }
+test('on password reset', function () {
+    event(new PasswordReset($this->user));
+    $this->assertMessageLogged('Reseted password using "Forgot Password" option.');
+});
 
-    public function test_onPasswordReset()
-    {
-        event(new \Illuminate\Auth\Events\PasswordReset($this->user));
-        $this->assertMessageLogged('Reseted password using "Forgot Password" option.');
-    }
+test('on start impersonating', function () {
+    $impersonated = User::factory()->create([
+        'first_name' => 'John',
+        'last_name' => 'Doe',
+    ]);
 
-    public function test_onStartImpersonating()
-    {
-        $impersonated = \App\Models\User::factory()->create([
-            'first_name' => 'John',
-            'last_name' => 'Doe',
-        ]);
+    event(new TakeImpersonation($this->user, $impersonated));
 
-        event(new \Lab404\Impersonate\Events\TakeImpersonation($this->user, $impersonated));
+    $this->assertMessageLogged("Started impersonating user John Doe (ID: {$impersonated->id})");
+});
 
-        $this->assertMessageLogged("Started impersonating user John Doe (ID: {$impersonated->id})");
-    }
+test('on stop impersonating', function () {
+    $impersonated = User::factory()->create([
+        'first_name' => 'John',
+        'last_name' => 'Doe',
+    ]);
 
-    public function test_onStopImpersonating()
-    {
-        $impersonated = \App\Models\User::factory()->create([
-            'first_name' => 'John',
-            'last_name' => 'Doe',
-        ]);
+    event(new LeaveImpersonation($this->user, $impersonated));
 
-        event(new \Lab404\Impersonate\Events\LeaveImpersonation($this->user, $impersonated));
-
-        $this->assertMessageLogged("Stopped impersonating user John Doe (ID: {$impersonated->id})");
-    }
-}
+    $this->assertMessageLogged("Stopped impersonating user John Doe (ID: {$impersonated->id})");
+});

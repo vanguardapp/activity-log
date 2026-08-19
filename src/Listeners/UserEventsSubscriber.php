@@ -2,11 +2,6 @@
 
 namespace Vanguard\UserActivity\Listeners;
 
-use Illuminate\Auth\Events\PasswordReset;
-use Illuminate\Auth\Events\Registered;
-use Illuminate\Events\Dispatcher;
-use Lab404\Impersonate\Events\LeaveImpersonation;
-use Lab404\Impersonate\Events\TakeImpersonation;
 use App\Events\Settings\Updated as SettingsUpdated;
 use App\Events\User\Banned;
 use App\Events\User\ChangedAvatar;
@@ -21,13 +16,16 @@ use App\Events\User\TwoFactorEnabled;
 use App\Events\User\TwoFactorEnabledByAdmin;
 use App\Events\User\UpdatedByAdmin;
 use App\Events\User\UpdatedProfileDetails;
+use Illuminate\Auth\Events\PasswordReset;
+use Illuminate\Auth\Events\Registered;
+use Illuminate\Events\Dispatcher;
+use Lab404\Impersonate\Events\LeaveImpersonation;
+use Lab404\Impersonate\Events\TakeImpersonation;
 use Vanguard\UserActivity\Logger;
 
 class UserEventsSubscriber
 {
-    public function __construct(private readonly Logger $logger)
-    {
-    }
+    public function __construct(private readonly Logger $logger) {}
 
     public function onLogin(LoggedIn $event): void
     {

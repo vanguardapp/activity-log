@@ -2,17 +2,15 @@
 
 namespace Vanguard\UserActivity\Listeners;
 
-use Illuminate\Events\Dispatcher;
 use App\Events\Permission\Created;
 use App\Events\Permission\Deleted;
 use App\Events\Permission\Updated;
+use Illuminate\Events\Dispatcher;
 use Vanguard\UserActivity\Logger;
 
 class PermissionEventsSubscriber
 {
-    public function __construct(private readonly Logger $logger)
-    {
-    }
+    public function __construct(private readonly Logger $logger) {}
 
     public function onCreate(Created $event): void
     {
